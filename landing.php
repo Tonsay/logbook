@@ -65,8 +65,7 @@
             text-transform: uppercase;
         }
 
-        /* 🟢 THE FIX: CSS GRID 🟢 */
-        /* Grid locks the columns into exactly 260px each */
+        
         .roles-container {
             display: grid;
             grid-template-columns: 260px 260px; 
@@ -130,11 +129,10 @@
             color: #00A5EF; 
         }
 
-        /* Adjusts grid for mobile phones */
+       
         @media (max-width: 768px) {
             .roles-container {
-                grid-template-columns: 260px; /* Stacks the boxes on small screens */
-                gap: 30px;
+                grid-template-columns: 260px; 
             }
             .header-container {
                 flex-direction: column;
@@ -155,7 +153,7 @@
             </div>
         </div>
 
-        <!-- Cleaned up links with no inline styles! -->
+   
         <div class="roles-container">
             
             <a href="/logbook/login.php?role=superadmin" class="role-card">
