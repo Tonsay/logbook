@@ -4,7 +4,7 @@ $sidebar_total = 0;
 $sidebar_cat_counts = [];
 
 if (isset($conn)) {
-    // 1. Fetch Categories for the Navigation Links
+   
     $cat_result = $conn->query("SELECT category_name FROM category_tb ORDER BY category_id ASC");
     if ($cat_result && $cat_result->num_rows > 0) {
         while ($row = $cat_result->fetch_assoc()) {
@@ -12,10 +12,8 @@ if (isset($conn)) {
         }
     }
 
-    // --- NEW LOGIC: Dynamic Year-Based Counting ---
     $filter_year = $_GET['year'] ?? '';
 
-    // 2. Build the Total Documents Query
     $sidebar_total_query = "SELECT COUNT(*) AS total_docs FROM issuance_tb";
     if (!empty($filter_year)) {
         $escaped_year = mysqli_real_escape_string($conn, $filter_year);
@@ -25,7 +23,6 @@ if (isset($conn)) {
     $sidebar_total_result = mysqli_query($conn, $sidebar_total_query);
     $sidebar_total = ($sidebar_total_result) ? mysqli_fetch_assoc($sidebar_total_result)['total_docs'] : 0;
 
-    // 3. Build the Category Stats Query
     $sidebar_cat_query = "SELECT category, COUNT(*) as total FROM issuance_tb";
     if (!empty($filter_year)) {
         $sidebar_cat_query .= " WHERE YEAR(date_issued) = '$escaped_year'";

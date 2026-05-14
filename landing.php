@@ -87,7 +87,7 @@
             cursor: pointer;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             
-            /* Locks the height permanently */
+          
             height: 280px; 
             box-sizing: border-box;
         }
