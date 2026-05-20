@@ -24,13 +24,13 @@ if (empty($history_logs)) {
         $details = htmlspecialchars($log['action_details']);
 
       
-        echo '<div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; padding: 15px; margin-bottom: 12px;">';
+       echo '<div style="background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 10px; padding: 15px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">';
         echo '<div style="color: #00A5EF; font-size: 11px; font-weight: bold; margin-bottom: 5px;">🗓️ ' . $date . '</div>';
-        echo '<div style="color: white; font-size: 15px; font-weight: bold; margin-bottom: 5px;">' . $action . '</div>';
-        echo '<div style="color: #b9e6ff; font-size: 12px; margin-bottom: 8px;">👤 Performed by: <strong>' . $user . '</strong></div>';
+        echo '<div style="color: #333333; font-size: 15px; font-weight: bold; margin-bottom: 5px;">' . $action . '</div>';
+        echo '<div style="color: #666666; font-size: 12px; margin-bottom: 8px;">👤 Performed by: <strong style="color:#333;">' . $user . '</strong></div>';
         
         if (!empty($details)) {
-            echo '<div style="color: #aaa; font-size: 12px; background: rgba(0,0,0,0.2); padding: 8px 10px; border-radius: 6px;">' . $details . '</div>';
+            echo '<div style="color: #555555; font-size: 12px; background: #ffffff; padding: 8px 10px; border-radius: 6px; border: 1px solid #e0e0e0;">' . $details . '</div>';
         }
         echo '</div>';
     }

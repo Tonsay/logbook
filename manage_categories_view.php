@@ -85,12 +85,13 @@
             <div class="header-left" style="display: flex; align-items: center;">
                 <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
                 <div class="header-branding-dynamic">
-<img src="/logbook/assets/img/logo.png" alt="Logo" onclick="window.location.reload();" style="width: 45px; height: 45px; object-fit: contain; cursor: pointer;">                    <div style="display: flex; flex-direction: column; margin-left: 12px;">
-                        <h2 style="margin: 0; font-size: 15px; font-weight: 700; color: #000000;">Science Education Institute</h2>
-                        <p style="margin: 3px 0 0 0; font-size: 11px; color: #00A5EF;">LOGBOOK SYSTEM</p>
+                    <img src="/logbook/assets/img/logo.png" alt="Logo" style="width: 45px; height: 45px; object-fit: contain;">
+                    <div style="display: flex; flex-direction: column; margin-left: 12px;">
+                        <h2 style="margin: 0; font-size: 15px; font-weight: 700; color: #ffffff;">Science Education Institute</h2>
+                        <p style="margin: 3px 0 0 0; font-size: 11px; color: #b9e6ff;">LOGBOOK SYSTEM</p>
                     </div>
                 </div>
-                <h2 style="margin: 0 0 0 20px; font-size: 20px; color: #00A5EF; font-weight: 700;"><img src="/logbook/assets/img/issuances.png" class="sidebar-icon" alt="Issuances" style="width: 34px; height: 34px;">Manage Categories</h2>
+                <h2 style="margin: 0 0 0 20px; font-size: 20px; color: #ffffff; font-weight: 700;"><img src="/logbook/assets/img/issuances.png" class="sidebar-icon" alt="Issuances" style="width: 34px; height: 34px;">Manage Categories</h2>
             </div>
 
             <div class="header-right">
@@ -160,7 +161,7 @@
 
         <div id="addCategory" class="tab-content" style="display: none;">
             <div class="form-container" style="max-width: 600px;">
-                <h3 style="color: #00A5EF; margin-top: 0;">Register New Category</h3>
+                <h3 style="color: #ffffff; margin-top: 0;">Register New Category</h3>
                 <form action="manage_categories.php" method="POST">
                     <div class="form-group">
                         <label>Document Name</label>

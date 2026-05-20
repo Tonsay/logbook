@@ -139,11 +139,11 @@
                 <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
                 <div class="header-branding-dynamic">
 <img src="/logbook/assets/img/logo.png" alt="Logo" onclick="window.location.reload();" style="width: 45px; height: 45px; object-fit: contain; cursor: pointer;">                    <div style="display: flex; flex-direction: column; margin-left: 12px;">
-                        <h2 style="margin: 0; font-size: 15px; font-weight: 700; color: #ffffff;">Science Education Institute</h2>
-                        <p style="margin: 3px 0 0 0; font-size: 11px; color: #b9e6ff;">LOGBOOK SYSTEM</p>
+                        <h2 style="margin: 0; font-size: 15px; font-weight: 700; color: #040404;">Science Education Institute</h2>
+                        <p style="margin: 3px 0 0 0; font-size: 11px; color: #00A5EF;">LOGBOOK SYSTEM</p>
                     </div>
                 </div>
-                <h2 style="margin: 0 0 0 20px; font-size: 20px; color: #ffffff; font-weight: 700;"><img src="/logbook/assets/img/admin.png" class="sidebar-icon" alt="Admins" style="width: 34px; height: 34px;"> Manage System Admins</h2>
+                <h2 style="margin: 0 0 0 20px; font-size: 20px; color: #00A5EF; font-weight: 700;"><img src="/logbook/assets/img/admin.png" class="sidebar-icon" alt="Admins" style="width: 34px; height: 34px;"> Manage System Admins</h2>
             </div>
 
             <div class="header-right">
@@ -183,7 +183,7 @@
                             <tr>
                                 <td style="color: #b9e6ff; font-weight: bold;">#<?php echo htmlspecialchars($u['user_id']); ?></td>
                                 <td>
-                                    <strong class="clickable-name" style="color: #ffffff; cursor: pointer; transition: 0.2s;" onmouseover="this.style.color='#00A5EF'" onmouseout="this.style.color='#ffffff'" onclick="openDetailsModal('<?php echo $u['user_id']; ?>', '<?php echo addslashes($u['username']); ?>', '<?php echo $u['role']; ?>')">
+                                    <strong class="clickable-name" style="color: #000000; cursor: pointer; transition: 0.2s;" onmouseover="this.style.color='#00A5EF'" onmouseout="this.style.color='#ffffff'" onclick="openDetailsModal('<?php echo $u['user_id']; ?>', '<?php echo addslashes($u['username']); ?>', '<?php echo $u['role']; ?>')">
                                         <?php echo htmlspecialchars($u['username']); ?>
                                     </strong>
                                 </td>
@@ -223,20 +223,20 @@
         </div>
 
         <div id="addAdmin" class="tab-content" style="display: none;">
-            <div class="form-container" style="max-width: 600px; padding: 35px !important; background: rgba(0,0,0,0.2) !important; border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 12px !important;">
-                <h3 style="color: #ffffff; margin-top: 0; margin-bottom: 25px;">Create a New Account</h3>
+            <div class="form-container" style="max-width: 600px; padding: 35px !important; background: #ffffff !important; border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 12px !important;">
+                <h3 style="color: #00A5EF; margin-top: 0; margin-bottom: 25px;">Create a New Account</h3>
                 <form action="manage_admins.php" method="POST">
                     
                     <div class="form-group" style="margin-bottom: 20px;">
-                        <label style="color: #b9e6ff !important; font-weight: 700 !important; margin-bottom: 10px !important; display: block !important;">Username</label>
+                        <label style="color: #000000 !important; font-weight: 700 !important; margin-bottom: 10px !important; display: block !important;">Username</label>
                         <input type="text" name="username" required autocomplete="new-password" style="width: 100% !important; padding: 14px !important; background: rgba(0,0,0,0.3) !important; border: 1px solid rgba(255,255,255,0.1) !important; border-radius: 8px !important; color: #ffffff !important; box-sizing: border-box !important;">
                     </div>
                     
                     <div class="form-group" style="margin-bottom: 20px;">
-                        <label style="color: #b9e6ff !important; font-weight: 700 !important; margin-bottom: 10px !important; display: block !important;">Password</label>
+                        <label style="color: #000000 !important; font-weight: 700 !important; margin-bottom: 10px !important; display: block !important;">Password</label>
                         <div class="password-wrapper" style="position: relative;">
                             <input type="password" name="password" id="add_pass" required autocomplete="new-password" style="width: 100% !important; padding: 14px !important; padding-right: 40px !important; background: rgba(0,0,0,0.3) !important; border: 1px solid rgba(255,255,255,0.1) !important; border-radius: 8px !important; color: #ffffff !important; box-sizing: border-box !important;">
-                            <button type="button" class="password-toggle" onclick="togglePass('add_pass', this)" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #94a3b8;"></button>
+                            <button type="button" class="password-toggle" onclick="togglePass('add_pass', this)" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #ffffff;"></button>
                         </div>
                     </div>
           

@@ -13,8 +13,8 @@
             margin: 0;
             padding: 0;
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background: linear-gradient(135deg, #00A5EF 0%, #116897 100%);
-            color: #ffffff;
+            background:  #ffffff;
+            color: #000000;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -52,7 +52,7 @@
             margin: 0;
             font-size: 28px;
             font-weight: 700;
-            color: #ffffff;
+            color: #000000;
             letter-spacing: 0.5px;
         }
 
@@ -60,7 +60,7 @@
             margin: 5px 0 0 0;
             font-size: 20px;
             font-weight: 600;
-            color: #ffffff;
+            color: #00A5EF;
             letter-spacing: 2px;
             text-transform: uppercase;
         }
