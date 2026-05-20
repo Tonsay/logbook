@@ -79,7 +79,7 @@ if (isset($conn)) {
 
 <div class="sidebar" id="mySidebar">
     <div class="sidebar-brand">
-        <img src="assets/img/logo.png" alt="Logo">
+        <img src="/logbook/assets/img/logo.png" alt="Logo" onclick="window.location.reload();" style="width: 45px; height: 45px; object-fit: contain; cursor: pointer;">
         <div class="brand-text">
             <h2>Science Education Institute</h2>
             <p>LOGBOOK SYSTEM</p>

@@ -49,7 +49,7 @@ $available_years = getAvailableYears($conn);
                 <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
                 
                 <div class="header-branding-dynamic">
-                    <img src="/logbook/assets/img/logo.png" alt="Logo" style="width: 45px; height: 45px; object-fit: contain; filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.3));">
+                    <img src="/logbook/assets/img/logo.png" alt="Logo" onclick="window.location.reload();" style="width: 45px; height: 45px; object-fit: contain; cursor: pointer;">
                     
                     <div style="display: flex; flex-direction: column; margin-left: 12px;">
                         <h2 style="margin: 0; font-size: 15px; font-weight: 700; line-height: 1.2; color: #ffffff;">Science Education Institute</h2>

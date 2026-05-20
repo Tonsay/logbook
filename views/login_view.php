@@ -25,7 +25,7 @@
     </style>
 
     <div class="login-card">
-        <img src="/logbook/assets/img/logo.png" alt="DOST-SEI Logo">
+        <img src="/logbook/assets/img/logo.png" alt="Logo" onclick="window.location.reload();" style="width: 45px; height: 45px; object-fit: contain; cursor: pointer;">
         <h2>Welcome Back</h2>
         <p>DOST-SEI Logbook System</p>
 

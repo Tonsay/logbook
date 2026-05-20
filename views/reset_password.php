@@ -11,8 +11,7 @@
 <body class="login-bg">
 
     <div class="login-card">
-        <img src="/logbook/assets/img/logo.png" alt="DOST-SEI Logo">
-        <h2>New Password</h2>
+<img src="/logbook/assets/img/logo.png" alt="Logo" onclick="window.location.reload();" style="width: 45px; height: 45px; object-fit: contain; cursor: pointer;">        <h2>New Password</h2>
         <p>Set a new secure password for your account.</p>
 
         <?php if (!empty($error_msg)): ?>

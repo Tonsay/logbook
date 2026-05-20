@@ -11,7 +11,7 @@
 <body class="login-bg">
 
     <div class="login-card">
-        <img src="/logbook/assets/img/logo.png" alt="DOST-SEI Logo">
+        <img src="/logbook/assets/img/logo.png" alt="Logo" onclick="window.location.reload();" style="width: 45px; height: 45px; object-fit: contain; cursor: pointer;">
         <h2>Forgot Password</h2>
         <p>Enter your username to get a reset link.</p>
 
