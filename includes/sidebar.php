@@ -87,7 +87,7 @@ if (isset($conn)) {
     </div> 
 
     <div class="sidebar-nav">
-        <div class="sidebar-nav-title">Categories</div>
+        <div class="sidebar-nav-title"style="color: #00A5EF;">Categories</div>
         <a href="index.php" class="nav-link <?php if(empty($current_category)) echo 'active'; ?>">View All</a>
         
         <?php foreach ($sidebar_categories as $cat_name): ?>
@@ -98,8 +98,8 @@ if (isset($conn)) {
 
         <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'superadmin'): ?>
 
-            <div class="sidebar-nav-title" style="margin-top: 25px; color: #f1c40f;">
-            <img src="/logbook/assets/img/superadmin.png" class= "superadmin-icon" alt="Crown"> Admin Controls
+            <div class="sidebar-nav-title" style="margin-top: 25px; color: #00A5EF;">
+            <img src="/logbook/assets/img/superadmin1.png" class= "superadmin-icon" alt="Crown"> Admin Controls
     </div>
     <a href="manage_admins.php" class="nav-link">
         <img src="/logbook/assets/img/admin.png" class="sidebar-icon" alt="Admins"> Manage Admins
