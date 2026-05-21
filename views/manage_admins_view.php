@@ -80,7 +80,7 @@
                     <tbody>
                         <?php foreach ($all_users as $u): ?>
                             <tr>
-                                <td style=" color: #000000;">#<?php echo htmlspecialchars($u['user_id']); ?></td>
+                                <td>#<?php echo htmlspecialchars($u['user_id']); ?></td>
                                 <td>
                                     <strong class="clickable-name" onclick="openDetailsModal('<?php echo $u['user_id']; ?>', '<?php echo addslashes($u['username']); ?>', '<?php echo $u['role']; ?>')">
                                         <?php echo htmlspecialchars($u['username']); ?>
