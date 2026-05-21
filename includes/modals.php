@@ -4,7 +4,7 @@
     
     <div id="loaderSuccess" style="display: none; width: 50px; height: 50px; background: #10b981; border-radius: 50%; justify-content: center; align-items: center; color: white; font-size: 24px; font-weight: bold; animation: popIn 0.3s ease-out;">✓</div>
 
-    <p id="loaderText" style="color: #00A5EF; margin-top: 15px; font-weight: bold; font-size: 14px; letter-spacing: 1px; animation: pulseText 1.5s infinite;">Processing...</p>
+    <p id="loaderText" style="color: #00A5EF; margin-top: 15px; font-weight: bold; font-size: 14px; letter-spacing: 1px; animation: pulseText 1.5s infinite;">Loading...</p>
 
 </div>
 
@@ -186,7 +186,7 @@
                 </div>
                 <div>
                     <label style="color: #555555; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 8px;">Category</label>
-                    <select name="category" id="edit_category" required style="width: 100%; box-sizing: border-box; background: #ffffff; color: #333333; border: 1px solid #cccccc; padding: 12px; border-radius: 8px; outline: none; transition: border-color 0.2s;">
+                    <select name="category" id="edit_category" required style="width: 100%; box-sizing: border-box; background: #88d5da; color: #333333; border: 1px solid #cccccc; padding: 12px; border-radius: 8px; outline: none; transition: border-color 0.2s;">
                         <option value="" disabled selected>-- Select Category --</option>
                         <?php 
                         $cat_query = mysqli_query($conn, "SELECT * FROM category_tb ORDER BY category_name ASC"); 
