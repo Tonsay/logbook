@@ -35,7 +35,7 @@
                     <img src="/logbook/assets/img/logo.png" alt="Logo" onclick="window.location.reload();" style="width: 45px; height: 45px; object-fit: contain; cursor: pointer;">
                     
                     <div style="display: flex; flex-direction: column; margin-left: 12px;">
-                        <h2 style="margin: 0; font-size: 15px; font-weight: 700; line-height: 1.2; color: #000000;">Science Education Institute</h2>
+                        <h2 style="margin: 0; font-size: 15px; font-weight: 700; line-height: 1.2;">Science Education Institute</h2>
                         <p style="margin: 3px 0 0 0; font-size: 11px; letter-spacing: 1px; color: #00A5EF; font-weight: 600;">LOGBOOK SYSTEM</p>
                     </div>
                 </div>

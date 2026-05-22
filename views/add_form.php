@@ -30,10 +30,14 @@
             <div class="header-branding-dynamic">
             <img src="/logbook/assets/img/logo.png" alt="Logo" onclick="window.location.reload();" style="width: 45px; height: 45px; object-fit: contain; cursor: pointer;">                
             <div style="display: flex; flex-direction: column; margin-left: 12px;">
-                    <h2 style="margin: 0; font-size: 15px; font-weight: 700; line-height: 1.2; color: #040404;">Science Education Institute</h2>
+                    <h2 style="margin: 0; font-size: 15px; font-weight: 700; line-height: 1.2;">Science Education Institute</h2>
                     <p style="margin: 3px 0 0 0; font-size: 11px; letter-spacing: 1px; color: #00A5EF; font-weight: 600;">LOGBOOK SYSTEM</p>
                 </div>
             </div>
+
+            <h2 style="margin: 0 0 0 20px; font-size: 20px; color: #00A5EF; font-weight: 700;">
+                    <img src="/logbook/assets/img/admin.png" class="sidebar-icon" alt="Entry" style="width: 40px; height: 40px; vertical-align: middle;"> Add Issuance
+            </h2>
         </div>
 
         <div class="header-right">

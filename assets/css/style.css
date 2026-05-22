@@ -279,6 +279,11 @@ body.dark-mode .tab-link { background: #1e1e1e; color: #aaaaaa; border-color: #3
 body.dark-mode .tab-link:hover { background: #2d2d2d; color: #ffffff; }
 body.dark-mode .tab-link.active { background: #121212; color: #00A5EF; border-top: 3px solid #00A5EF; border-bottom: 1px solid #121212; }
 
+body.dark-mode .brand-text h2,
+body.dark-mode .header-branding-dynamic .brand-text h2 { 
+    color: #ffffff !important; 
+}
+
 /* =========================================
    MISC & UTILITIES
    ========================================= */
