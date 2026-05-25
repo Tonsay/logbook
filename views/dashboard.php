@@ -85,27 +85,33 @@ $available_years = getAvailableYears($conn);
         <div class="dashboard-controls">
             <h2 class="page-title"><?php echo htmlspecialchars($current_category ?: "All Issuances"); ?></h2>
             
-            <div class="control-actions">
-               <form action="/logbook/index.php" method="GET" style="margin: 0;">
-                    <input type="hidden" name="category" value="<?php echo htmlspecialchars($current_category); ?>">
-                    <input type="hidden" name="search" value="<?php echo htmlspecialchars($search_query); ?>">
-                    <select name="year" class="year-dropdown" onchange="this.form.submit()">
-                        <option value="">All Years</option>
-                        <?php if(!empty($available_years)): ?>
-                            <?php foreach ($available_years as $yr): ?>
-                                <option value="<?php echo htmlspecialchars($yr); ?>" <?php if($current_year == $yr) echo 'selected'; ?>>
-                                    <?php echo htmlspecialchars($yr); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    </select>
-                </form>
+<div class="control-actions">
+    
+    <form action="/logbook/index.php" method="GET" style="margin: 0; display: flex; gap: 15px; align-items: center;">
+        <input type="hidden" name="category" value="<?php echo htmlspecialchars($current_category); ?>">
+        <input type="hidden" name="search" value="<?php echo htmlspecialchars($search_query); ?>">
+        
+        <button type="button" class="btn-add-entry" onclick="openAddEntryModal('<?php echo addslashes(htmlspecialchars($current_category)); ?>')">
+            + Add Entry
+        </button>
+        
+        <select name="year" class="year-dropdown" onchange="this.form.submit()">
+            <option value="">All Years</option>
+            <?php if(!empty($available_years)): ?>
+                <?php foreach ($available_years as $yr): ?>
+                    <option value="<?php echo htmlspecialchars($yr); ?>" <?php if($current_year == $yr) echo 'selected'; ?>>
+                        <?php echo htmlspecialchars($yr); ?>
+                    </option>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </select>
+    </form>
 
-<a href="print.php?category=<?php echo urlencode($current_category); ?>&year=<?php echo urlencode($current_year); ?>&search=<?php echo urlencode($search_query); ?>" class="btn-print">
-    <img src="assets/img/print.png" alt="Print">
-    <span>Print PDF</span>
-</a>
-            </div>
+    <a href="print.php?category=<?php echo urlencode($current_category); ?>&year=<?php echo urlencode($current_year); ?>&search=<?php echo urlencode($search_query); ?>" class="btn-print">
+        <img src="assets/img/print.png" alt="Print">
+        <span>Print PDF</span>
+    </a>
+</div>
         </div>
 
         <div class="table-container">

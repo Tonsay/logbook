@@ -425,3 +425,34 @@ body.dark-mode input:-webkit-autofill, body.dark-mode input:-webkit-autofill:hov
    ======================================================== */
 .action-btns { display: inline-flex; gap: 6px; padding: 4px; background: transparent; }
 body.dark-mode #deleteModal .modal-card p { color: #aaaaaa; }
+
+
+/* =========================================
+   ADD ENTRY BUTTON (Next to Year Dropdown)
+   ========================================= */
+.btn-add-entry {
+    display: inline-flex; 
+    align-items: center; 
+    gap: 8px; 
+    background: #00A5EF; 
+    color: #ffffff; 
+    padding: 10px 20px; 
+    border-radius: 12px; 
+    font-weight: bold; 
+    border: none; 
+    cursor: pointer; 
+    transition: 0.3s;
+    font-family: inherit;
+    font-size: 14px;
+    box-shadow: 0 4px 15px rgba(0, 165, 239, 0.2);
+}
+
+.btn-add-entry:hover { 
+    background: #008cc9; 
+    transform: translateY(-2px); 
+}
+
+
+body.dark-mode .btn-add-entry {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}

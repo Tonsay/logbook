@@ -154,7 +154,7 @@ window.addEventListener('click', function(event) {
         closeLogoutModal();
         closeEditModal(); 
         closeDeleteConfirm();
-        
+        closeHistoryModal(); // Added history modal close
         
         if(typeof closeDeleteModal === 'function') closeDeleteModal();
         if(typeof closeEditDivisionModal === 'function') closeEditDivisionModal();
@@ -198,12 +198,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /* TAB SWITCHER LOGIC (UNIVERSAL FIX) */
 function switchTab(arg1, arg2) {
-    
     document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
-    
     document.querySelectorAll('.tab-link').forEach(link => link.classList.remove('active'));
 
-   
     let tabId = typeof arg1 === 'string' ? arg1 : arg2;
     let activeElement = typeof arg1 === 'string' ? arg2 : arg1.currentTarget;
 
@@ -308,6 +305,7 @@ function triggerSuccessLoad(message) {
         }, 1500);
     }
 }
+
 /* HISTORY MODAL LOGIC (AJAX) */
 function openHistoryModal(docId) {
     closeDetailsModal(); 
@@ -315,14 +313,11 @@ function openHistoryModal(docId) {
     document.getElementById('history_display_id').innerText = docId;
     document.getElementById('historyContentContainer').innerHTML = '<div style="text-align: center; color: #00A5EF; margin-top: 20px; animation: pulseText 1.5s infinite;">Loading timeline...</div>';
     
-   
     document.getElementById('historyModal').style.display = 'flex';
-
     
     fetch('/logbook/fetch_history.php?id=' + encodeURIComponent(docId))
     .then(response => response.text())
     .then(html => {
-        
         document.getElementById('historyContentContainer').innerHTML = html;
     })
     .catch(error => {
@@ -331,5 +326,33 @@ function openHistoryModal(docId) {
 }
 
 function closeHistoryModal() {
-    document.getElementById('historyModal').style.display = 'none';
+    const histModal = document.getElementById('historyModal');
+    if (histModal) histModal.style.display = 'none';
 }
+
+/* ADD ENTRY LOGIC */
+function openAddEntryModal(categoryName) {
+    window.location.href = '/logbook/add_issuance.php?category=' + encodeURIComponent(categoryName);
+}
+
+
+document.addEventListener("DOMContentLoaded", () => {
+   
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlCategory = urlParams.get('category');
+
+    if (urlCategory) {
+       
+        const categoryDropdown = document.querySelector('select[name="category"], select[name="category_name"]');
+        
+        if (categoryDropdown) {
+           
+            for (let i = 0; i < categoryDropdown.options.length; i++) {
+                if (categoryDropdown.options[i].value === urlCategory || categoryDropdown.options[i].text === urlCategory) {
+                    categoryDropdown.selectedIndex = i;
+                    break;
+                }
+            }
+        }
+    }
+});
