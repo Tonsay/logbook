@@ -156,7 +156,7 @@ td:last-child { border-right: none; }
 .table-body-scroll::-webkit-scrollbar { width: 8px; }
 .table-body-scroll::-webkit-scrollbar-thumb { background: #cccccc; border-radius: 10px; }
 
-/* Keep padding from squishing table corners */
+
 table th:first-child, table td:first-child { padding-left: 20px; }
 table th:last-child, table td:last-child { padding-right: 20px; }
 
@@ -266,8 +266,6 @@ body.dark-mode .sidebar a.nav-link { color: #aaaaaa; }
 body.dark-mode .sidebar a.nav-link:hover { color: #00A5EF; background: rgba(0, 165, 239, 0.1); }
 body.dark-mode .sidebar a.nav-link.active { color: #ffffff; background: #00A5EF; }
 body.dark-mode .sidebar-nav-title { color: #777777; }
-body.dark-mode .modal-card { background: #1e1e1e; border: 1px solid #333333; color: white; }
-body.dark-mode .modal-card h3 { color: #00A5EF; }
 body.dark-mode .btn-cancel { background: #333333; color: white; border: 1px solid #444444; }
 body.dark-mode .btn-cancel:hover { background: #444444; }
 body.dark-mode .btn-print { background: #1e1e1e; color: #ffffff; border-color: #333333; }
@@ -284,6 +282,81 @@ body.dark-mode .header-branding-dynamic .brand-text h2 {
     color: #ffffff !important; 
 }
 
+/* =========================================
+   FIX: ALL MODALS (DETAILS, EDIT, HISTORY, DELETE) DARK MODE
+   ========================================= */
+
+
+body.dark-mode .modal-overlay > div {
+    background-color: #1e1e1e !important;
+    border: 1px solid #333333 !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8) !important;
+}
+
+
+body.dark-mode .modal-overlay p,
+body.dark-mode .modal-overlay span,
+body.dark-mode .modal-overlay div,
+body.dark-mode .modal-overlay strong,
+body.dark-mode .modal-overlay b,
+body.dark-mode .modal-overlay h4,
+body.dark-mode .modal-overlay h5,
+body.dark-mode .modal-overlay h6,
+body.dark-mode .modal-overlay label {
+    color: #e0e0e0 !important;
+}
+
+
+body.dark-mode .modal-overlay [style*="color: #888"],
+body.dark-mode .modal-overlay [style*="color:#888"],
+body.dark-mode .modal-overlay .detail-label {
+    color: #aaaaaa !important;
+}
+
+
+body.dark-mode .modal-overlay h3,
+body.dark-mode .modal-overlay .edit-title {
+    color: #00A5EF !important;
+    border-bottom-color: #333333 !important;
+}
+
+
+body.dark-mode .modal-overlay input,
+body.dark-mode .modal-overlay textarea,
+body.dark-mode .modal-overlay select {
+    background-color: #121212 !important;
+    border-color: #333333 !important;
+    color: #ffffff !important;
+}
+
+
+body.dark-mode .modal-overlay div[style*="border"],
+body.dark-mode .modal-overlay div[style*="background: #fff"],
+body.dark-mode .modal-overlay div[style*="background: white"],
+body.dark-mode .modal-overlay div[style*="background-color: #fff"],
+body.dark-mode .modal-overlay div[style*="background-color: #ffffff"],
+body.dark-mode .modal-overlay div[class*="card"],
+body.dark-mode .modal-overlay div[class*="item"] {
+    background-color: #121212 !important;
+    border-color: #333333 !important;
+}
+
+
+body.dark-mode .modal-overlay div[style*="rgba(0, 165, 239"] {
+    background-color: rgba(0, 165, 239, 0.1) !important;
+    border: none !important;
+}
+
+
+body.dark-mode .modal-overlay .btn-cancel,
+body.dark-mode .modal-overlay button[style*="background: #e0e0e0"] {
+    background-color: #333333 !important;
+    color: #ffffff !important;
+    border: 1px solid #444444 !important;
+}
+body.dark-mode .modal-overlay .btn-cancel:hover {
+    background-color: #444444 !important;
+}
 /* =========================================
    MISC & UTILITIES
    ========================================= */
@@ -351,8 +424,4 @@ body.dark-mode input:-webkit-autofill, body.dark-mode input:-webkit-autofill:hov
    CATEGORY STYLES
    ======================================================== */
 .action-btns { display: inline-flex; gap: 6px; padding: 4px; background: transparent; }
-.modal-card h3.text-blue { border-bottom: 1px solid #e0e0e0; }
-body.dark-mode .modal-card h3.text-blue { border-bottom-color: #333333; }
-#deleteModal .modal-card p { color: #666666; }
 body.dark-mode #deleteModal .modal-card p { color: #aaaaaa; }
-

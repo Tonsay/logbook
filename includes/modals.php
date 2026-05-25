@@ -48,7 +48,7 @@
 
         <div style="margin-top: 10px;">
             <label style="color: #666666; font-size: 11px; font-weight: bold; text-transform: uppercase;">Subject</label>
-            <p id="modalSubject" style="margin: 5px 0 0 0; line-height: 1.6; background: #f8f9fa; color: #333333; padding: 15px; border-radius: 12px; border: 1px solid #e0e0e0; font-weight: 500;"></p>
+            <p id="modalSubject" style="margin: 5px 0 0 0; line-height: 1.6; color: #333333; padding: 15px; border-radius: 12px; border: 1px solid #e0e0e0; font-weight: 500;"></p>
         </div>
 
         <div style="margin-top: 25px; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px;">
