@@ -144,13 +144,13 @@ select.year-dropdown option { background: #ffffff; color: #333333; }
 table { width: 100%; border-collapse: collapse; border-spacing: 0; }
 
 th { 
-    padding: 16px; background: #f8f9fa; color: #00A5EF; text-align: left; font-weight: 800; 
+    padding: 12px; background: #f8f9fa; color: #00A5EF; text-align: left; font-weight: 800; 
     border-bottom: 2px solid #e0e0e0; border-right: 1px solid #e0e0e0; 
     position: sticky; top: 0; z-index: 10; 
 }
 th:last-child { border-right: none; }
 
-td { padding: 16px; color: #555555; vertical-align: middle; border-bottom: 1px solid #eeeeee; border-right: 1px solid #eeeeee; }
+td { padding: 12px; color: #555555; vertical-align: middle; border-bottom: 1px solid #eeeeee; border-right: 1px solid #eeeeee; }
 td:last-child { border-right: none; }
 
 .table-body-scroll::-webkit-scrollbar { width: 8px; }
@@ -428,7 +428,7 @@ body.dark-mode #deleteModal .modal-card p { color: #aaaaaa; }
 
 
 /* =========================================
-   ADD ENTRY BUTTON (Next to Year Dropdown)
+   ADD ENTRY BUTTON 
    ========================================= */
 .btn-add-entry {
     display: inline-flex; 
@@ -455,4 +455,92 @@ body.dark-mode #deleteModal .modal-card p { color: #aaaaaa; }
 
 body.dark-mode .btn-add-entry {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* =========================================
+   MINIMAL REPORTS CARD
+   ========================================= */
+.minimal-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 40px 60px; 
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    width: 100% !important; 
+    max-width: 800px !important; 
+    margin: 0 auto;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    box-sizing: border-box;
+}
+
+.minimal-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #111111;
+    margin-bottom: 25px;
+    text-align: left !important; 
+}
+
+.minimal-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100% !important; 
+}
+
+.minimal-item {
+    display: flex;
+    justify-content: space-between !important; 
+    align-items: center;
+    padding: 16px 0;
+    width: 100%;
+}
+
+.minimal-name {
+    font-size: 15px;
+    color: #666666;
+    font-weight: 500;
+    text-align: left;
+}
+
+.minimal-count {
+    font-size: 16px;
+    font-weight: 700;
+    color: #00A5EF;
+    text-align: right;
+}
+
+
+.minimal-total-row {
+    margin-top: 10px;
+    padding-top: 20px;
+    border-top: 1px solid #eaeaea;
+}
+
+.minimal-total-row .minimal-name {
+    color: #111111;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.minimal-total-row .minimal-count {
+    font-size: 22px; 
+    font-weight: 800;
+}
+
+
+body.dark-mode .minimal-card { background: #1e1e1e; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+body.dark-mode .minimal-title, body.dark-mode .minimal-total-row .minimal-name { color: #ffffff; }
+body.dark-mode .minimal-name { color: #aaaaaa; }
+body.dark-mode .minimal-total-row { border-top-color: #333333; }
+
+
+.custom-date-picker {
+  
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2300A5EF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 15px center !important; 
+    background-size: 18px !important;
+    padding-right: 45px !important; 
+    cursor: pointer;
 }

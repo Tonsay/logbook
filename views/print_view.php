@@ -54,7 +54,7 @@
                         <td style="text-align: center;"><?php echo htmlspecialchars($row['document_id']); ?></td>
                         <td style="text-align: center;"><?php echo htmlspecialchars($row['division'] ?? 'SEI'); ?></td>
                         <td style="text-align: center;"><?php echo htmlspecialchars($row['issuance_number']); ?></td>
-                        <td style="text-align: center;"><?php echo htmlspecialchars($row['date_issued']); ?></td>
+                        <td style="text-align: center;"><?php echo date('m-d-Y', strtotime($row['date_issued'])); ?></td>
                         <td><?php echo nl2br(htmlspecialchars($row['subject'])); ?></td>
                     </tr>
                     <?php endforeach; ?>

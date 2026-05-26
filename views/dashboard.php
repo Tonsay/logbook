@@ -119,24 +119,34 @@ $available_years = getAvailableYears($conn);
                 <table>
                     <thead>
                         <tr>
-                            <th class="text-center">Document ID</th>
-                            <th class="text-center">Division</th>
-                            <th class="text-center">Issuance Number</th>
-                            <th class="text-center">Date Issued</th>
-                            <th>Subject</th>
-                            <th class="text-center">Category</th>
+                            <th style="text-align: center; width: 13%;">Document ID</th>
+
+                            <th style="text-align: center; width: 5%;">Division</th>
+
+                            <th style="text-align: center; width: 10%;">Issuance Number</th>
+
+                            <th style="text-align: center; width: 13%; white-space: nowrap;">Date Issued</th>
+
+                            <th style="text-align: center; width: 30%;">Subject</th>
+
+                            <th style="text-align: center; width: 10%;">Category</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php if (!empty($issuances)): ?>
                             <?php foreach ($issuances as $row): ?>
                                 <tr onclick='showDetails(<?php echo json_encode($row, JSON_HEX_APOS | JSON_HEX_QUOT); ?>)' style="cursor: pointer;">
-                                    <td class="text-center"><?php echo htmlspecialchars($row['document_id']); ?></td>
-                                    <td class="text-center"><?php echo htmlspecialchars($row['division']); ?></td>
-                                    <td class="text-center"><?php echo htmlspecialchars($row['issuance_number']); ?></td>
-                                    <td class="text-center"><?php echo htmlspecialchars($row['date_issued']); ?></td>
-                                    <td><?php echo nl2br(htmlspecialchars($row['subject'])); ?></td>
-                                    <td class="text-center"><?php echo htmlspecialchars($row['category']); ?></td>
+                                    <td style="text-align: center; width: 13%;"><?php echo htmlspecialchars($row['document_id']); ?></td>
+
+                                    <td style="text-align: center; width: 5%;"><?php echo htmlspecialchars($row['division']); ?></td>
+
+                                    <td style="text-align: center; width: 10%;"><?php echo htmlspecialchars($row['issuance_number']); ?></td>
+
+                                    <td style="text-align: center; width: 13%;"><?php echo date('m-d-Y', strtotime($row['date_issued'])); ?></td>
+
+                                    <td style="width: 30%;"><?php echo nl2br(htmlspecialchars($row['subject'])); ?></td>
+
+                                    <td style="text-align: center;  width: 10%;"><?php echo htmlspecialchars($row['category']); ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php else: ?>

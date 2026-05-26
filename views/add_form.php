@@ -5,6 +5,7 @@
     <title>Add New Logbook Entry</title>
     <link rel="stylesheet" href="/logbook/assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body>
 
@@ -106,8 +107,16 @@
 
                     <div class="form-group">
                         <label>Date Issued</label>
-                        <input type="date" id="date_issued_input" name="date_issued" required>
-                    </div>
+                        <input 
+                        type="text" 
+                        name="date_issued" 
+                        id="edit_date_issued" 
+                        class="custom-date-picker" 
+                        placeholder="YYYY-MM-DD" 
+                        required 
+                        style="width: 100%; box-sizing: border-box; background: #ffffff; color: #333333; border: 1px solid #cccccc; padding: 12px; border-radius: 8px; outline: none; transition: border-color 0.2s;"
+                    >
+                   </div>
                 </div>
                 
                 <div class="form-group">
@@ -143,6 +152,7 @@
 <?php include __DIR__ . '/../includes/modals.php'; ?>
 
 <script src="/logbook/assets/js/app.js?v=<?php echo time(); ?>"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 </body>
 </html>

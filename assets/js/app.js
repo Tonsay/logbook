@@ -54,7 +54,7 @@ function closeDetailsModal() {
     }
 }
 
-/* EDIT MODAL LOGIC (AJAX) */
+/* EDIT MODAL LOGIC*/
 function openEditModal() {
     if (!currentIssuanceData) {
         alert("Error loading data. Please refresh and try again.");
@@ -146,7 +146,7 @@ function closeLogoutModal() {
     if(m) m.classList.remove('active');
 }
 
-/* CLOSE OVERLAYS ON BACKGROUND CLICK (Upgraded) */
+/* CLOSE OVERLAYS ON BACKGROUND CLICK */
 window.addEventListener('click', function(event) {
     if (event.target.classList.contains('modal-overlay')) {
         closeDetailsModal();
@@ -154,7 +154,7 @@ window.addEventListener('click', function(event) {
         closeLogoutModal();
         closeEditModal(); 
         closeDeleteConfirm();
-        closeHistoryModal(); // Added history modal close
+        closeHistoryModal(); 
         
         if(typeof closeDeleteModal === 'function') closeDeleteModal();
         if(typeof closeEditDivisionModal === 'function') closeEditDivisionModal();
@@ -196,7 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-/* TAB SWITCHER LOGIC (UNIVERSAL FIX) */
+/* TAB SWITCHER LOGIC*/
 function switchTab(arg1, arg2) {
     document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
     document.querySelectorAll('.tab-link').forEach(link => link.classList.remove('active'));
@@ -243,7 +243,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-/* GLOBAL LOADER LOGIC (With Success State) */
+/* GLOBAL LOADER LOGIC */
 let isShowingSuccess = false; 
 
 window.addEventListener('load', function() {
@@ -306,7 +306,7 @@ function triggerSuccessLoad(message) {
     }
 }
 
-/* HISTORY MODAL LOGIC (AJAX) */
+/* HISTORY MODAL */
 function openHistoryModal(docId) {
     closeDetailsModal(); 
     
@@ -355,4 +355,13 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
     }
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    flatpickr(".custom-date-picker", {
+        allowInput: true,       
+        dateFormat: "Y-m-d",  
+        disableMobile: "true"   
+    });
 });

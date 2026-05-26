@@ -1,3 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Logbook Entry</title>
+    <link rel="stylesheet" href="/logbook/assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+</head>
+
 <div id="globalLoader" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.9); z-index: 999999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.4s ease; display: none; opacity: 0; backdrop-filter: blur(5px);">
     
     <div id="loaderSpinner" style="width: 50px; height: 50px; border: 5px solid rgba(0, 165, 239, 0.2); border-top-color: #00A5EF; border-radius: 50%; animation: spin 1s linear infinite;"></div>
@@ -174,7 +185,14 @@
                 </div>
                 <div>
                     <label style="color: #555555; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 8px;">Date Issued</label>
-                    <input type="date" name="date_issued" id="edit_date_issued" required style="width: 100%; box-sizing: border-box; background: #ffffff; color: #333333; border: 1px solid #cccccc; padding: 12px; border-radius: 8px; outline: none; transition: border-color 0.2s;">
+                     <input 
+                        type="text" 
+                        name="date_issued" 
+                        id="edit_date_issued" 
+                        class="custom-date-picker" 
+                        placeholder="YYYY-MM-DD" 
+                        required 
+                        style="width: 100%; box-sizing: border-box; background: #ffffff; color: #333333; border: 1px solid #cccccc; padding: 12px; border-radius: 8px; outline: none; transition: border-color 0.2s;" >
                 </div>
             </div>
 

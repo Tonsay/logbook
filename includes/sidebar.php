@@ -113,7 +113,7 @@ if (isset($conn)) {
         <?php endif; ?>
         <a href="/logbook/reports.php" class="nav-link">
         <img src="/logbook/assets/img/count.png" class="sidebar-icon" alt="Charts"> Document Reports</a>
-        <a href="add_issuance.php" class="btn-add" style="margin-top: 20px;">+ Add New Entry</a>
+     <!-- <a href="add_issuance.php" class="btn-add" style="margin-top: 20px;">+ Add New Entry</a> !-->
     </div>
     
     <div class="sidebar-footer">
