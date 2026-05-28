@@ -365,3 +365,33 @@ document.addEventListener("DOMContentLoaded", () => {
         disableMobile: "true"   
     });
 });
+
+/* =========================================
+   MAGIC ENYE SHORTCUT (Alt + N)
+   ========================================= */
+document.addEventListener('keydown', function(event) {
+    
+    if (event.altKey && (event.key === 'n' || event.key === 'N' || event.code === 'KeyN')) {
+        
+      
+        const activeBox = document.activeElement;
+        
+      
+        if (activeBox.tagName === 'INPUT' || activeBox.tagName === 'TEXTAREA') {
+            
+            event.preventDefault(); 
+       
+            const enye = event.shiftKey ? 'Ñ' : 'ñ';
+            
+        
+            const start = activeBox.selectionStart;
+            const end = activeBox.selectionEnd;
+            const currentText = activeBox.value;
+            
+         
+            activeBox.value = currentText.slice(0, start) + enye + currentText.slice(end);
+
+            activeBox.selectionStart = activeBox.selectionEnd = start + 1;
+        }
+    }
+});
