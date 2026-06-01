@@ -1,6 +1,6 @@
 <?php
 
-function getIssuances($conn, $category = null, $search = null, $year = null) {
+function getIssuances($conn, $category = null, $search = null, $year = null, $sort = 'issuance_asc') {
     $sql = "SELECT * FROM issuance_tb WHERE 1=1";
     $params = [];
     $types = "";
@@ -26,8 +26,21 @@ function getIssuances($conn, $category = null, $search = null, $year = null) {
         $types .= "sss";
     }
 
-    
-    $sql .= " ORDER BY document_id ASC";
+
+    if ($sort === 'newest') {
+        $sql .= " ORDER BY date_issued DESC"; 
+    } elseif ($sort === 'oldest') {
+        $sql .= " ORDER BY date_issued ASC";  
+    } elseif ($sort === 'id_desc') {
+        $sql .= " ORDER BY document_id DESC";
+    } elseif ($sort === 'id_asc') {
+        $sql .= " ORDER BY document_id ASC";
+    } elseif ($sort === 'issuance_asc') {
+        $sql .= " ORDER BY issuance_number ASC"; 
+    } else {
+        $sql .= " ORDER BY issuance_number ASC"; 
+    }
+  
     
     $stmt = $conn->prepare($sql);
 
