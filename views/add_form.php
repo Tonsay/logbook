@@ -1,3 +1,34 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+include_once __DIR__ . '/../includes/db.php';
+
+
+$clicked_category = $_GET['category'] ?? ''; 
+$suggested_number = '';
+
+
+if (!empty($clicked_category)) {
+    $stmt = $conn->prepare("SELECT issuance_number FROM issuance_tb WHERE category = ? ORDER BY issuance_number DESC LIMIT 1");
+    $stmt->bind_param("s", $clicked_category);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    
+    if ($row && !empty($row['issuance_number'])) {
+   
+        $parts = explode('-', $row['issuance_number']);
+        $next_num = (int)end($parts) + 1;
+        $suggested_number = str_pad($next_num, 3, '0', STR_PAD_LEFT);
+    } else {
+        $suggested_number = '001'; 
+    }
+} else {
+    
+    $suggested_number = $next_issuance_num ?? ''; 
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -75,7 +106,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>Document ID</label>
-                        <input type="text" id="preview_doc_id" name="document_id" value="<?php echo htmlspecialchars($next_doc_id); ?>" readonly>
+                        <input type="text" id="preview_doc_id" name="document_id" value="<?php echo htmlspecialchars($next_doc_id ?? ''); ?>" readonly>
                     </div>
                     <div class="form-group">
                         <label>Division</label>
@@ -101,7 +132,8 @@
                         <div style="display: flex; gap: 8px; align-items: center;">
                             <input type="text" id="year_prefix" name="year_prefix" style="width: 90px; text-align: center; font-weight: bold; background: rgba(0, 0, 0, 0.2);" value="<?php echo date('Y'); ?>" readonly>
                             <span style="color: white; font-weight: bold; font-size: 1.2rem;">-</span>
-                            <input type="text" id="issuance_num_only" name="issuance_num_only" value="<?php echo htmlspecialchars($next_issuance_num); ?>" required maxlength="5" pattern="[0-9]{3}(-[a-zA-Z])?" title="Enter 3 numbers, optionally followed by a dash and a letter (e.g., 001 or 001-A)">
+                            
+                            <input type="text" id="issuance_num_only" name="issuance_num_only" value="<?php echo htmlspecialchars($suggested_number); ?>" required maxlength="5" pattern="[0-9]{3}(-[a-zA-Z])?" title="Enter 3 numbers, optionally followed by a dash and a letter (e.g., 001 or 001-A)">
                         </div>
                     </div>
 
@@ -122,11 +154,11 @@
                 <div class="form-group">
                     <label>Category</label>
                     <select name="category" required>
-                        <option value="" disabled selected>-- Select Type of Document --</option>
+                        <option value="" disabled <?php echo empty($clicked_category) ? 'selected' : ''; ?>>-- Select Type of Document --</option>
                         
                         <?php if (!empty($categories)): ?>
                             <?php foreach ($categories as $cat): ?>
-                                <option value="<?php echo htmlspecialchars($cat); ?>" style="color: white;">
+                                <option value="<?php echo htmlspecialchars($cat); ?>" style="color: white;" <?php echo ($clicked_category === $cat) ? 'selected' : ''; ?>>
                                     <?php echo htmlspecialchars($cat); ?>
                                 </option>
                             <?php endforeach; ?>
