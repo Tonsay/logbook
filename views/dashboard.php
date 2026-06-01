@@ -145,8 +145,8 @@ $available_years = getAvailableYears($conn);
                 <table>
                     <thead>
                         <tr>
-                            <th style="text-align: center; width: 10%;">Issuance Number</th>
                             <th style="text-align: center; width: 13%;">Document ID</th>
+                            <th style="text-align: center; width: 10%;">Issuance Number</th>
                             <th style="text-align: center; width: 13%; white-space: nowrap;">Date Issued</th>
                             <th style="text-align: left; width: auto;">Subject</th> 
                             <th style="text-align: center; width: 10%;">Division</th>
@@ -157,8 +157,8 @@ $available_years = getAvailableYears($conn);
                         <?php if (!empty($issuances)): ?>
                             <?php foreach ($issuances as $row): ?>
                                 <tr onclick='showDetails(<?php echo json_encode($row, JSON_HEX_APOS | JSON_HEX_QUOT); ?>)' style="cursor: pointer;">
-                                    <td style="text-align: center; width: 10%;"><?php echo htmlspecialchars($row['issuance_number']); ?></td>
                                     <td style="text-align: center; width: 13%;"><?php echo htmlspecialchars($row['document_id']); ?></td>
+                                       <td style="text-align: center; width: 10%;"><?php echo htmlspecialchars($row['issuance_number']); ?></td>
                                     <td style="text-align: center; width: 13%;"><?php echo date('m-d-Y', strtotime($row['date_issued'])); ?></td>
                                     <td style="text-align: left; width: auto;"><?php echo nl2br(htmlspecialchars($row['subject'])); ?></td>
                                     <td style="text-align: center; width: 10%;"><?php echo htmlspecialchars($row['division']); ?></td>

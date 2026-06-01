@@ -26,11 +26,11 @@ function getIssuances($conn, $category = null, $search = null, $year = null, $so
         $types .= "sss";
     }
 
-
-    if ($sort === 'newest') {
-        $sql .= " ORDER BY date_issued DESC"; 
+if ($sort === 'newest') {
+        
+        $sql .= " ORDER BY date_issued DESC, document_id DESC"; 
     } elseif ($sort === 'oldest') {
-        $sql .= " ORDER BY date_issued ASC";  
+        $sql .= " ORDER BY date_issued ASC, document_id ASC";  
     } elseif ($sort === 'id_desc') {
         $sql .= " ORDER BY document_id DESC";
     } elseif ($sort === 'id_asc') {
@@ -40,7 +40,6 @@ function getIssuances($conn, $category = null, $search = null, $year = null, $so
     } else {
         $sql .= " ORDER BY issuance_number ASC"; 
     }
-  
     
     $stmt = $conn->prepare($sql);
 
