@@ -40,22 +40,22 @@
         <table>
             <thead>
                 <tr>
-                    <th style="width: 15%;">Document ID</th>
-                    <th style="width: 10%;">Division</th> 
+                    <!-- <th style="width: 15%;">Document ID</th> --> 
                     <th style="width: 15%;">Issuance No.</th>
                     <th style="width: 15%;">Date Issued</th>
                     <th style="width: 45%;">Subject</th>
+                    <th style="width: 10%;">Division</th>
                </tr>
             </thead>
             <tbody>
                 <?php if (!empty($issuances)): ?>
                     <?php foreach ($issuances as $row): ?>
                     <tr>
-                        <td style="text-align: center;"><?php echo htmlspecialchars($row['document_id']); ?></td>
-                        <td style="text-align: center;"><?php echo htmlspecialchars($row['division'] ?? 'SEI'); ?></td>
+                        <!-- <td style="text-align: center;"><?php echo htmlspecialchars($row['document_id']); ?></td> -->
                         <td style="text-align: center;"><?php echo htmlspecialchars($row['issuance_number']); ?></td>
                         <td style="text-align: center;"><?php echo date('m-d-Y', strtotime($row['date_issued'])); ?></td>
                         <td><?php echo nl2br(htmlspecialchars($row['subject'])); ?></td>
+                        <td style="text-align: center;"><?php echo htmlspecialchars($row['division'] ?? 'SEI'); ?></td>
                     </tr>
                     <?php endforeach; ?>
                 <?php else: ?>
