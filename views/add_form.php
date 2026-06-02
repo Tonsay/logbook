@@ -1,34 +1,3 @@
-<?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-include_once __DIR__ . '/../includes/db.php';
-
-
-$clicked_category = $_GET['category'] ?? ''; 
-$suggested_number = '';
-
-
-if (!empty($clicked_category)) {
-    $stmt = $conn->prepare("SELECT issuance_number FROM issuance_tb WHERE category = ? ORDER BY issuance_number DESC LIMIT 1");
-    $stmt->bind_param("s", $clicked_category);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $row = $result->fetch_assoc();
-    
-    if ($row && !empty($row['issuance_number'])) {
-   
-        $parts = explode('-', $row['issuance_number']);
-        $next_num = (int)end($parts) + 1;
-        $suggested_number = str_pad($next_num, 3, '0', STR_PAD_LEFT);
-    } else {
-        $suggested_number = '001'; 
-    }
-} else {
-    
-    $suggested_number = $next_issuance_num ?? ''; 
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -93,7 +62,6 @@ if (!empty($clicked_category)) {
         <div class="form-container">
             <h2>Logbook Details</h2>
             
-         
             <?php if (isset($_SESSION['error_message'])): ?>
                 <div style="background: rgba(220, 53, 69, 0.1); border: 1px solid #dc3545; color: #ff6b6b; padding: 12px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-weight: bold;">
                     ⚠️ <?php echo $_SESSION['error_message']; ?>
@@ -101,7 +69,6 @@ if (!empty($clicked_category)) {
                 <?php unset($_SESSION['error_message']); ?>
             <?php endif; ?>
             
-     
             <form action="/logbook/process_add.php" method="POST" onsubmit="showLoader()">
                 <div class="form-row">
                     <div class="form-group">

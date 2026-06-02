@@ -25,12 +25,11 @@ function getIssuances($conn, $category = null, $search = null, $year = null, $so
         $params[] = $searchTerm;
         $types .= "sss";
     }
-
 if ($sort === 'newest') {
         
-        $sql .= " ORDER BY date_issued DESC, document_id DESC"; 
+        $sql .= " ORDER BY created_at DESC, document_id DESC"; 
     } elseif ($sort === 'oldest') {
-        $sql .= " ORDER BY date_issued ASC, document_id ASC";  
+        $sql .= " ORDER BY created_at ASC, document_id ASC";  
     } elseif ($sort === 'id_desc') {
         $sql .= " ORDER BY document_id DESC";
     } elseif ($sort === 'id_asc') {
