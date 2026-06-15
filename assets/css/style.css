@@ -544,3 +544,92 @@ body.dark-mode .minimal-total-row { border-top-color: #333333; }
     padding-right: 45px !important; 
     cursor: pointer;
 }
+
+/* ========================================================
+  FLEXIBLE RESPONSIVE ADJUSTMENTS
+   ======================================================== */
+@media screen and (max-width: 768px) {
+    
+  
+    .sidebar { position: fixed; left: -250px; z-index: 9999; transition: left 0.3s ease; }
+    .sidebar.active { left: 0; }
+    .main-content { margin-left: 0 !important; width: 100%; padding: 15px !important; }
+
+    .top-header { flex-direction: column !important; align-items: stretch !important; height: auto !important; padding: 10px !important; gap: 15px; }
+    .header-left { flex-wrap: wrap !important; width: 100% !important; gap: 10px !important; }
+    .header-branding-dynamic { flex-grow: 1; }
+    .header-search { width: 100% !important; margin: 10px 0 0 0 !important; }
+    .header-search input { width: 100% !important; box-sizing: border-box; }
+    .header-right { width: 100% !important; justify-content: center !important; gap: 20px; }
+
+    
+    .dashboard-controls { 
+        flex-direction: column !important; 
+        align-items: stretch !important; 
+        gap: 20px !important; 
+        padding: 15px !important;
+    }
+    
+    
+    .dashboard-controls > div:first-child { 
+        flex-direction: column !important; 
+        align-items: stretch !important; 
+        gap: 15px !important; 
+    }
+    
+    
+    .page-title { 
+        padding-right: 0 !important; 
+        text-align: center !important; 
+    }
+    
+    
+    .dashboard-controls > div:first-child form { 
+        border-left: none !important; 
+        padding-left: 0 !important; 
+        flex-direction: column !important; 
+        align-items: stretch !important; 
+        gap: 8px !important; 
+    }
+    .dashboard-controls span { text-align: center; margin-bottom: 2px; }
+
+  
+    .control-actions { 
+        width: 100% !important; 
+        flex-direction: column !important; 
+        gap: 15px !important; 
+    }
+    
+    
+    .control-actions form { 
+        width: 100% !important; 
+        flex-direction: column !important; 
+        gap: 10px !important; 
+    }
+    
+  
+    .btn-add-entry, 
+    .btn-print, 
+    .year-dropdown, 
+    select[name="sort"] {
+        width: 100% !important; 
+        margin: 0 !important; 
+        box-sizing: border-box !important; 
+        justify-content: center !important; 
+        text-align: center !important; 
+        text-align-last: center !important; 
+    }
+    
+   
+    .table-container { 
+        overflow-x: auto; 
+        -webkit-overflow-scrolling: touch; 
+    }
+    
+    .table-body-scroll {
+        overflow-x: auto;
+        white-space: nowrap; 
+    }
+    
+    .form-row { flex-direction: column !important; gap: 15px !important; }
+}

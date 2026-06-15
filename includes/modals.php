@@ -62,6 +62,16 @@
             <p id="modalSubject" style="margin: 5px 0 0 0; line-height: 1.6; color: #333333; padding: 15px; border-radius: 12px; border: 1px solid #e0e0e0; font-weight: 500;"></p>
         </div>
 
+        <div id="lib_financial_section" style="display: none; background: rgba(0, 165, 239, 0.05); padding: 15px; border-radius: 8px; margin-top: 15px; border: 1px solid rgba(0, 165, 239, 0.2);">
+            <h4 style="margin-top: 0; color: #00A5EF; font-size: 14px; text-transform: uppercase;">Financial & Project Details</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div><span style="font-size: 11px; font-weight: bold; color: #666; text-transform: uppercase;">Project No:</span> <br><strong id="detail_project_num"></strong></div>
+                <div><span style="font-size: 11px; font-weight: bold; color: #666; text-transform: uppercase;">Duration:</span> <br><strong id="detail_duration"></strong></div>
+                <div><span style="font-size: 11px; font-weight: bold; color: #666; text-transform: uppercase;">Action:</span> <br><strong id="detail_action"></strong></div>
+                <div><span style="font-size: 11px; font-weight: bold; color: #666; text-transform: uppercase;">Amount:</span> <br><strong id="detail_amount" style="color: #28a745; font-size: 16px;"></strong></div>
+            </div>
+        </div>
+
         <div style="margin-top: 25px; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px;">
             
         <a id="editBtn" href="javascript:void(0)" onclick="openEditModal()" class="modal-action-btn" 
@@ -170,15 +180,16 @@
                     <select name="division" id="edit_division" required style="width: 100%; box-sizing: border-box; background: #ffffff; color: #333333; border: 1px solid #cccccc; padding: 12px; border-radius: 8px; outline: none; transition: border-color 0.2s;">
                         <option value="" disabled selected>-- Select Division --</option>
                         <?php 
-                        
-                        $div_query = mysqli_query($conn, "SELECT * FROM divisions_tb ORDER BY division_name ASC"); 
-                        if ($div_query && mysqli_num_rows($div_query) > 0) {
-                            while ($row = mysqli_fetch_assoc($div_query)) {
-                                $divName = htmlspecialchars($row['division_name']);
-                                echo "<option value=\"$divName\">$divName</option>";
+                        if(isset($conn)){
+                            $div_query = mysqli_query($conn, "SELECT * FROM divisions_tb ORDER BY division_name ASC"); 
+                            if ($div_query && mysqli_num_rows($div_query) > 0) {
+                                while ($row = mysqli_fetch_assoc($div_query)) {
+                                    $divName = htmlspecialchars($row['division_name']);
+                                    echo "<option value=\"$divName\">$divName</option>";
+                                }
+                            } else {
+                                echo "<option value=\"\">No divisions found</option>";
                             }
-                        } else {
-                            echo "<option value=\"\">No divisions found</option>";
                         }
                         ?>
                     </select>
@@ -207,14 +218,16 @@
                     <select name="category" id="edit_category" required style="width: 100%; box-sizing: border-box; background: #88d5da; color: #333333; border: 1px solid #cccccc; padding: 12px; border-radius: 8px; outline: none; transition: border-color 0.2s;">
                         <option value="" disabled selected>-- Select Category --</option>
                         <?php 
-                        $cat_query = mysqli_query($conn, "SELECT * FROM category_tb ORDER BY category_name ASC"); 
-                        if ($cat_query && mysqli_num_rows($cat_query) > 0) {
-                            while ($row = mysqli_fetch_assoc($cat_query)) {
-                                $catName = htmlspecialchars($row['category_name']);
-                                echo "<option value=\"$catName\">$catName</option>";
+                        if(isset($conn)){
+                            $cat_query = mysqli_query($conn, "SELECT * FROM category_tb ORDER BY category_name ASC"); 
+                            if ($cat_query && mysqli_num_rows($cat_query) > 0) {
+                                while ($row = mysqli_fetch_assoc($cat_query)) {
+                                    $catName = htmlspecialchars($row['category_name']);
+                                    echo "<option value=\"$catName\">$catName</option>";
+                                }
+                            } else {
+                                echo "<option value=\"\">No categories found</option>";
                             }
-                        } else {
-                            echo "<option value=\"\">No categories found</option>";
                         }
                         ?>
                     </select>
@@ -235,6 +248,112 @@
         </form>
     </div>
 </div>
+
+<div id="editLibModal" class="modal-overlay" style="display: none; z-index: 10000; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;">
+    
+    <div class="edit-card" style="position: relative; max-width: 700px; width: 100%; margin: auto; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 12px; padding: 30px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1); text-align: left; max-height: 90vh; overflow-y: auto;">
+        
+        <h3 class="edit-title" style="color: #00A5EF; text-align: center; border-bottom: 1px solid #e0e0e0; padding-bottom: 10px; margin-top: 0; font-size: 20px;">Edit Line-Item-Budget</h3>
+        <p class="edit-subtitle" style="color: #666666; text-align: center; margin-bottom: 20px; font-size: 13px;">Updating Document: <strong id="edit_lib_display_id" style="color: #333333;"></strong></p>
+        
+        <form action="/logbook/process_edit_lib.php" method="POST" onsubmit="showLoader()" style="display: flex; flex-direction: column; gap: 20px; margin-top: 10px;">
+            <input type="hidden" name="document_id" id="edit_lib_doc_id">
+            <input type="hidden" name="category" value="Line-Item-Budget (LIB)">
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div>
+                    <label style="color: #555555; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 8px;">Project Number</label>
+                    <input type="text" name="project_number" id="edit_lib_project_number" readonly style="width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.05); color: #333333; border: 1px solid #cccccc; padding: 12px; border-radius: 8px; outline: none; font-weight: bold;">
+                </div>
+                <div>
+                    <label style="color: #555555; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 8px;">Date Issued</label>
+                    <input type="date" name="date_issued" id="edit_lib_date" required style="width: 100%; box-sizing: border-box; background: #ffffff; color: #333333; border: 1px solid #cccccc; padding: 12px; border-radius: 8px; outline: none;">
+                </div>
+            </div>
+
+            <div>
+                <label style="color: #555555; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 8px;">Project Description</label>
+                <textarea name="lib_project_desc" id="edit_lib_desc" rows="3" required style="width: 100%; box-sizing: border-box; background: #ffffff; color: #333333; border: 1px solid #cccccc; padding: 12px; border-radius: 8px; font-family: inherit; resize: vertical; outline: none;"></textarea>
+            </div>
+
+            <div style="border-top: 1px dashed #ccc; padding-top: 15px;">
+                <label style="color: #00A5EF; font-size: 13px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 12px;">Project Duration</label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+                    <div>
+                        <label style="color: #555555; font-size: 10px; font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 5px;">Start Month</label>
+                        <select name="duration_start_month" id="edit_lib_start" required style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc;">
+                            <option value="January">January</option> <option value="February">February</option>
+                            <option value="March">March</option> <option value="April">April</option>
+                            <option value="May">May</option> <option value="June">June</option>
+                            <option value="July">July</option> <option value="August">August</option>
+                            <option value="September">September</option> <option value="October">October</option>
+                            <option value="November">November</option> <option value="December">December</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="color: #555555; font-size: 10px; font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 5px;">End Month</label>
+                        <select name="duration_end_month" id="edit_lib_end" required style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc;">
+                            <option value="January">January</option> <option value="February">February</option>
+                            <option value="March">March</option> <option value="April">April</option>
+                            <option value="May">May</option> <option value="June">June</option>
+                            <option value="July">July</option> <option value="August">August</option>
+                            <option value="September">September</option> <option value="October">October</option>
+                            <option value="November">November</option> <option value="December">December</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="color: #555555; font-size: 10px; font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 5px;">Year</label>
+                        <input type="number" name="duration_year" id="edit_lib_year" required style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box;">
+                    </div>
+                </div>
+            </div>
+
+            <div style="border-top: 1px dashed #ccc; padding-top: 15px;">
+                <label style="color: #00A5EF; font-size: 13px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 12px;">Financial Details</label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div>
+                        <label style="color: #555555; font-size: 10px; font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 5px;">Budget Action</label>
+                        <select name="lib_action_type" id="edit_lib_action" required onchange="toggleEditActionNumber()" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #00A5EF; color: #00A5EF; font-weight: bold;">
+                            <option value="Original Budget">Original Budget</option>
+                            <option value="Amendment/Realignment">Amendment/Realignment</option>
+                        </select>
+
+                        <div id="edit_action_number_container" style="display: none; margin-top: 10px; background: rgba(0,165,239,0.05); padding: 8px; border-radius: 6px; border: 1px dashed #00A5EF;">
+                            <label style="font-size: 10px; font-weight: bold; color: #00A5EF; display: block; margin-bottom: 5px; text-transform: uppercase;">Specify Order:</label>
+                            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                                <label style="font-size: 12px; cursor: pointer; color: #333; display: flex; align-items: center; gap: 4px;">
+                                    <input type="radio" name="action_number" value="1st" id="edit_radio_1st"> 1st
+                                </label>
+                                <label style="font-size: 12px; cursor: pointer; color: #333; display: flex; align-items: center; gap: 4px;">
+                                    <input type="radio" name="action_number" value="2nd" id="edit_radio_2nd"> 2nd
+                                </label>
+                                <label style="font-size: 12px; cursor: pointer; color: #333; display: flex; align-items: center; gap: 4px;">
+                                    <input type="radio" name="action_number" value="3rd" id="edit_radio_3rd"> 3rd
+                                </label>
+                                <label style="font-size: 12px; cursor: pointer; color: #333; display: flex; align-items: center; gap: 4px;">
+                                    <input type="radio" name="action_number" value="4th" id="edit_radio_4th"> 4th
+                                </label>
+                                <label style="font-size: 12px; cursor: pointer; color: #333; display: flex; align-items: center; gap: 4px;">
+                                    <input type="radio" name="action_number" value="5th" id="edit_radio_5th"> 5th
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label style="color: #555555; font-size: 10px; font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 5px;">Budget Amount (Php)</label>
+                        <input type="number" step="0.01" name="lib_amount" id="edit_lib_amount" required style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box;">
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 15px; margin-top: 15px;">
+                <button type="button" class="btn-cancel" onclick="closeEditLibModal()" style="flex: 1; padding: 14px; background: #e0e0e0; color: #333333; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Cancel</button>
+                <button type="submit" class="btn-confirm" style="flex: 1; padding: 14px; background: #00A5EF; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Save Updates</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <div id="historyModal" class="modal-overlay" style="display: none; z-index: 10000; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;">
     
     <div class="edit-card" style="position: relative; max-width: 600px; width: 100%; margin: auto; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 12px; padding: 30px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1); text-align: left; max-height: 85vh; display: flex; flex-direction: column;">
@@ -250,6 +369,7 @@
         <button type="button" onclick="closeHistoryModal()" style="width: 100%; padding: 14px; background: #e0e0e0; color: #333333; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: background 0.2s;">Close History</button>
     </div>
 </div>
+
 <script>
 function handleEditSubmit(event) {
     event.preventDefault(); 

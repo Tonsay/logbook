@@ -12,12 +12,43 @@ function showDetails(data) {
     
     document.getElementById('modalCategory').innerText = data.category || "N/A";
     document.getElementById('modalDocID').innerText    = data.document_id || "N/A";
-    document.getElementById('modalIssNo').innerText    = data.issuance_number || "N/A";
+    
+   
+    let isLib = data.category && (data.category.includes('LIB') || data.category.includes('Line-Item'));
+    if (isLib) {
+        document.getElementById('modalIssNo').innerText = data.project_number || "N/A";
+    } else {
+        document.getElementById('modalIssNo').innerText = data.issuance_number || "N/A";
+    }
+    
     document.getElementById('modalDivision').innerText = data.division || "N/A";
     document.getElementById('modalDate').innerText     = data.date_issued || "N/A";
-    document.getElementById('modalSubject').innerText  = data.subject || "N/A";
+    
+    
+    document.getElementById('modalSubject').innerText  = (isLib && data.project_desc) ? data.project_desc : (data.subject || "N/A");
+    
     document.getElementById('modalCreatedBy').innerText = data.added_by || "Admin"; 
     document.getElementById('modalCreatedAt').innerText = data.created_at || "N/A";
+
+  
+    const libSection = document.getElementById('lib_financial_section');
+    if (libSection) {
+        if (isLib) {
+            libSection.style.display = 'block';
+            document.getElementById('detail_project_num').innerText = data.project_number || 'N/A';
+            document.getElementById('detail_action').innerText = data.action_type || 'N/A';
+            
+            const start = data.start_month || '';
+            const end = data.end_month || '';
+            const year = data.duration_year || '';
+            document.getElementById('detail_duration').innerText = `${start} to ${end} ${year}`;
+            
+            const amount = parseFloat(data.amount) || 0;
+            document.getElementById('detail_amount').innerText = "₱ " + amount.toLocaleString('en-US', {minimumFractionDigits: 2});
+        } else {
+            libSection.style.display = 'none';
+        }
+    }
 
     const attachBtn = document.getElementById('attachBtn');
     if(attachBtn) attachBtn.href = "attach_file.php?id=" + data.document_id;
@@ -54,27 +85,81 @@ function closeDetailsModal() {
     }
 }
 
-/* EDIT MODAL LOGIC*/
+/* EDIT MODAL LOGIC (THE SMART ROUTER) */
 function openEditModal() {
     if (!currentIssuanceData) {
         alert("Error loading data. Please refresh and try again.");
         return;
     }
     
-    if(document.getElementById('edit_display_id')) document.getElementById('edit_display_id').innerText = currentIssuanceData.document_id;
-    if(document.getElementById('edit_doc_id_hidden')) document.getElementById('edit_doc_id_hidden').value  = currentIssuanceData.document_id;
-    if(document.getElementById('edit_division')) document.getElementById('edit_division').value       = currentIssuanceData.division;
-    if(document.getElementById('edit_date_issued')) document.getElementById('edit_date_issued').value    = currentIssuanceData.date_issued;
-    if(document.getElementById('edit_category')) document.getElementById('edit_category').value       = currentIssuanceData.category;
-    if(document.getElementById('edit_subject')) document.getElementById('edit_subject').value        = currentIssuanceData.subject;
-    if(document.getElementById('edit_issuance_number')) document.getElementById('edit_issuance_number').value = currentIssuanceData.issuance_number;
-    closeDetailsModal();
-    const editModal = document.getElementById('editIssuanceModal');
-    if(editModal) editModal.style.display = 'flex';
+    const data = currentIssuanceData;
+    let isLib = data.category && (data.category.includes('LIB') || data.category.includes('Line-Item'));
+
+    if (isLib) {
+       
+        if(document.getElementById('edit_lib_display_id')) document.getElementById('edit_lib_display_id').innerText = data.document_id;
+        if(document.getElementById('edit_lib_doc_id')) document.getElementById('edit_lib_doc_id').value = data.document_id || '';
+        if(document.getElementById('edit_lib_project_number')) document.getElementById('edit_lib_project_number').value = data.project_number || data.issuance_number || '';
+       
+        if (data.date_issued && document.getElementById('edit_lib_date')) {
+            let d = new Date(data.date_issued);
+            document.getElementById('edit_lib_date').value = d.toISOString().split('T')[0];
+        }
+
+        if(document.getElementById('edit_lib_desc')) document.getElementById('edit_lib_desc').value = data.project_desc || data.subject || '';
+        if(document.getElementById('edit_lib_start')) document.getElementById('edit_lib_start').value = data.start_month || 'January';
+        if(document.getElementById('edit_lib_end')) document.getElementById('edit_lib_end').value = data.end_month || 'December';
+        if(document.getElementById('edit_lib_year')) document.getElementById('edit_lib_year').value = data.duration_year || new Date().getFullYear();
+        if(document.getElementById('edit_lib_amount')) document.getElementById('edit_lib_amount').value = data.amount || 0;
+
+      
+        let actionVal = data.action_type || 'Original Budget';
+        let orderVal = '';
+
+        const match = actionVal.match(/^(1st|2nd|3rd|4th|5th)\s+(Amendment\/Realignment)$/);
+        if (match) {
+            orderVal = match[1]; 
+            actionVal = match[2];
+        }
+
+        if(document.getElementById('edit_lib_action')) {
+            document.getElementById('edit_lib_action').value = actionVal;
+            toggleEditActionNumber(); 
+        }
+
+     
+        if (orderVal) {
+            let targetRadio = document.querySelector(`#edit_action_number_container input[value="${orderVal}"]`);
+            if (targetRadio) targetRadio.checked = true;
+        }
+
+        closeDetailsModal();
+        const editLibModal = document.getElementById('editLibModal');
+        if(editLibModal) editLibModal.style.display = 'flex';
+
+    } else {
+        // --- POPULATE THE STANDARD MODAL ---
+        if(document.getElementById('edit_display_id')) document.getElementById('edit_display_id').innerText = data.document_id;
+        if(document.getElementById('edit_doc_id_hidden')) document.getElementById('edit_doc_id_hidden').value  = data.document_id;
+        if(document.getElementById('edit_division')) document.getElementById('edit_division').value       = data.division;
+        if(document.getElementById('edit_date_issued')) document.getElementById('edit_date_issued').value    = data.date_issued;
+        if(document.getElementById('edit_category')) document.getElementById('edit_category').value       = data.category;
+        if(document.getElementById('edit_subject')) document.getElementById('edit_subject').value        = data.subject;
+        if(document.getElementById('edit_issuance_number')) document.getElementById('edit_issuance_number').value = data.issuance_number;
+        
+        closeDetailsModal();
+        const editModal = document.getElementById('editIssuanceModal');
+        if(editModal) editModal.style.display = 'flex';
+    }
 }
 
 function closeEditModal() {
     const modal = document.getElementById('editIssuanceModal');
+    if(modal) modal.style.display = 'none';
+}
+
+function closeEditLibModal() {
+    const modal = document.getElementById('editLibModal');
     if(modal) modal.style.display = 'none';
 }
 
@@ -153,6 +238,7 @@ window.addEventListener('click', function(event) {
         closeSettingsModal();
         closeLogoutModal();
         closeEditModal(); 
+        closeEditLibModal();
         closeDeleteConfirm();
         closeHistoryModal(); 
         
@@ -395,3 +481,136 @@ document.addEventListener('keydown', function(event) {
         }
     }
 });
+
+
+/* =========================================
+   LIB FORM LOGIC (Auto-Fill & Formatting)
+   ========================================= */
+function autoFillProject() {
+    var selector = document.getElementById("projectSelector");
+    var newProjInput = document.getElementById("newProjectInput");
+    var descBox = document.getElementById("projectDesc");
+    
+    if (!selector || !newProjInput || !descBox) return; 
+    var selectedOption = selector.options[selector.selectedIndex];
+    
+    if (selector.value === "NEW") {
+        newProjInput.style.display = "block";
+        newProjInput.required = true;
+        descBox.value = "";
+        descBox.readOnly = false;
+        descBox.style.background = "#ffffff";
+        descBox.placeholder = "Type the new project description here...";
+    } else {
+        newProjInput.style.display = "none";
+        newProjInput.required = false;
+        newProjInput.value = "";
+        descBox.value = selectedOption.getAttribute("data-desc");
+        descBox.readOnly = true;
+        descBox.style.background = "rgba(0,0,0,0.05)"; 
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const newProjectInput = document.getElementById('newProjectInput');
+    
+    if (newProjectInput) {
+        newProjectInput.addEventListener('input', function (e) {
+            let val = this.value.replace(/\D/g, ''); 
+            val = val.substring(0, 6); 
+            
+            let formatted = '';
+            if (val.length > 0) formatted += val.substring(0, 2); 
+            if (val.length >= 3) formatted += '-' + val.substring(2, 4); 
+            if (val.length >= 5) formatted += '-' + val.substring(4, 6); 
+            
+            this.value = formatted;
+        });
+    }
+});
+
+/* =========================================
+   EDIT FORM SUBMISSION LOGIC
+   ========================================= */
+function handleEditSubmit(event) {
+    event.preventDefault(); 
+   
+    if(typeof showLoader === 'function') showLoader();
+    
+  
+    const standardForm = document.getElementById('editIssuanceForm');
+    const libForm = document.getElementById('editLibForm'); 
+ 
+    const form = event.target;
+    const formData = new FormData(form);
+    
+    
+    const fetchUrl = formData.get('category') && formData.get('category').includes('LIB') 
+        ? '/logbook/process_edit_lib.php' 
+        : '/logbook/process_edit.php';
+
+    fetch(fetchUrl, {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.text())
+    .then(data => {
+        if (data.includes("SUCCESS") || data.includes("successfully")) {
+            if (typeof triggerSuccessLoad === 'function') {
+                triggerSuccessLoad("Document updated successfully!");
+            } else {
+                document.getElementById('loaderSpinner').style.display = 'none';
+                document.getElementById('loaderSuccess').style.display = 'flex';
+                document.getElementById('loaderText').innerText = "Updated Successfully!";
+                document.getElementById('loaderText').style.color = "#10b981";
+            }
+            setTimeout(() => { window.location.reload(); }, 1500);
+        } else {
+            if(typeof hideLoader === 'function') hideLoader();
+            alert("Database Error: " + data);
+        }
+    })
+    .catch(err => {
+        if(typeof hideLoader === 'function') hideLoader();
+        alert("Connection failed. Please check your network.");
+    });
+}
+
+/* =========================================
+   BUDGET ACTION TOGGLE LOGIC
+   ========================================= */
+function toggleActionNumber() {
+    const actionSelect = document.getElementById('lib_action_type');
+    const numberContainer = document.getElementById('action_number_container');
+    
+    if (!actionSelect || !numberContainer) return;
+
+
+    if (actionSelect.value === 'Amendment/Realignment') {
+        numberContainer.style.display = 'block';
+    } else {
+        numberContainer.style.display = 'none';
+        
+        document.querySelectorAll('input[name="action_number"]').forEach(radio => {
+            radio.checked = false;
+        });
+    }
+}
+
+/* FOR EDIT MODAL TOGGLE */
+function toggleEditActionNumber() {
+    const actionSelect = document.getElementById('edit_lib_action');
+    const numberContainer = document.getElementById('edit_action_number_container');
+    
+    if (!actionSelect || !numberContainer) return;
+
+    if (actionSelect.value === 'Amendment/Realignment') {
+        numberContainer.style.display = 'block';
+    } else {
+        numberContainer.style.display = 'none';
+        
+      
+        const radios = numberContainer.querySelectorAll('input[name="action_number"]');
+        radios.forEach(radio => radio.checked = false);
+    }
+}

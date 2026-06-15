@@ -22,6 +22,7 @@ $available_years = getAvailableYears($conn);
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Logbook System Dashboard</title>
     <link rel="stylesheet" href="/logbook/assets/css/style.css">
     
@@ -117,9 +118,10 @@ $available_years = getAvailableYears($conn);
                     <input type="hidden" name="search" value="<?php echo htmlspecialchars($search_query); ?>">
                     <input type="hidden" name="sort" value="<?php echo htmlspecialchars($current_sort); ?>">
                     
-                    <button type="button" class="btn-add-entry" onclick="openAddEntryModal('<?php echo addslashes(htmlspecialchars($current_category)); ?>')">
+                   
+                    <a href="add_issuance.php?category=<?php echo urlencode($current_category); ?>" class="btn-add-entry" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
                         + Add Entry
-                    </button>
+                    </a>
                     
                     <select name="year" class="year-dropdown" onchange="this.form.submit()">
                         <option value="">All Years</option>
@@ -140,15 +142,13 @@ $available_years = getAvailableYears($conn);
             </div>
         </div>
 
-        <div class="table-container">
-            <div class="table-body-scroll">
-                <table>
+       <table>
                     <thead>
                         <tr>
                             <th style="text-align: center; width: 13%;">Document ID</th>
-                            <th style="text-align: center; width: 10%;">Issuance Number</th>
-                            <th style="text-align: center; width: 13%; white-space: nowrap;">Date Issued</th>
-                            <th style="text-align: left; width: auto;">Subject</th> 
+                            <th style="text-align: center; width: 14%;">Issuance / Project No.</th>
+                            <th style="text-align: center; width: 12%; white-space: nowrap;">Date Issued</th>
+                            <th style="text-align: left; width: auto;">Subject / Details</th> 
                             <th style="text-align: center; width: 10%;">Division</th>
                             <th style="text-align: center; width: 10%;">Category</th>
                         </tr>
@@ -156,13 +156,54 @@ $available_years = getAvailableYears($conn);
                     <tbody>
                         <?php if (!empty($issuances)): ?>
                             <?php foreach ($issuances as $row): ?>
+                                <?php 
+                                    
+                                    $display_number = htmlspecialchars($row['issuance_number'] ?? '');
+                                    $display_subject = nl2br(htmlspecialchars($row['subject'] ?? ''));
+
+                                    
+                                    $is_lib = (strpos(strtolower($row['category']), 'lib') !== false || strpos(strtolower($row['category']), 'line-item') !== false);
+
+                                    if ($is_lib) {
+                                        
+                                        $display_number = htmlspecialchars($row['project_number'] ?? $row['issuance_number']);
+                                        
+                                        
+                                        $desc = htmlspecialchars($row['project_desc'] ?? 'No Description');
+                                        $duration = htmlspecialchars(($row['start_month'] ?? '') . ' - ' . ($row['end_month'] ?? '') . ' ' . ($row['duration_year'] ?? ''));
+                                        $action = htmlspecialchars($row['action_type'] ?? '');
+                                        
+                                        
+                                        $amount = number_format((float)($row['amount'] ?? 0), 2);
+                                        
+                                       
+                                        $display_subject = "
+                                            <div style='line-height: 1.4;'>
+                                                <strong style='color: #00A5EF;'>{$desc}</strong><br>
+                                                <span style='font-size: 12px; color: #555;'>
+                                                    <strong>Duration:</strong> {$duration} &nbsp;|&nbsp; 
+                                                    <strong>Action:</strong> {$action} &nbsp;|&nbsp; 
+                                                    <strong style='color: #28a745;'>Budget: ₱{$amount}</strong>
+                                                </span>
+                                            </div>
+                                        ";
+                                    }
+                                ?>
                                 <tr onclick='showDetails(<?php echo json_encode($row, JSON_HEX_APOS | JSON_HEX_QUOT); ?>)' style="cursor: pointer;">
-                                    <td style="text-align: center; width: 13%;"><?php echo htmlspecialchars($row['document_id']); ?></td>
-                                       <td style="text-align: center; width: 10%;"><?php echo htmlspecialchars($row['issuance_number']); ?></td>
-                                    <td style="text-align: center; width: 13%;"><?php echo date('m-d-Y', strtotime($row['date_issued'])); ?></td>
-                                    <td style="text-align: left; width: auto;"><?php echo nl2br(htmlspecialchars($row['subject'])); ?></td>
+                                    <td style="text-align: center; width: 13%; font-weight: 600;"><?php echo htmlspecialchars($row['document_id']); ?></td>
+                                    <td style="text-align: center; width: 14%;"><?php echo $display_number; ?></td>
+                                    <td style="text-align: center; width: 12%;"><?php echo date('M d, Y', strtotime($row['date_issued'])); ?></td>
+                                    
+                                    <td style="text-align: left; width: auto;"><?php echo $display_subject; ?></td>
+                                    
                                     <td style="text-align: center; width: 10%;"><?php echo htmlspecialchars($row['division']); ?></td>
-                                    <td style="text-align: center; width: 10%;"><?php echo htmlspecialchars($row['category']); ?></td>
+                                    <td style="text-align: center; width: 10%;">
+                                        <?php if($is_lib): ?>
+                                            <span style="background: rgba(0, 165, 239, 0.1); color: #00A5EF; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: bold;">LIB</span>
+                                        <?php else: ?>
+                                            <?php echo htmlspecialchars($row['category']); ?>
+                                        <?php endif; ?>
+                                    </td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php else: ?>
@@ -170,9 +211,6 @@ $available_years = getAvailableYears($conn);
                         <?php endif; ?>
                     </tbody>
                 </table>
-            </div>
-        </div>
-    </div>
 
     <?php include __DIR__ . '/../includes/modals.php'; ?>
 

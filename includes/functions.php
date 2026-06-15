@@ -1,43 +1,58 @@
 <?php
 
 function getIssuances($conn, $category = null, $search = null, $year = null, $sort = 'issuance_asc') {
-    $sql = "SELECT * FROM issuance_tb WHERE 1=1";
+  
+    $sql = "SELECT i.*, 
+                   l.project_number, 
+                   l.project_desc, 
+                   l.start_month, 
+                   l.end_month, 
+                   l.duration_year, 
+                   l.action_type, 
+                   l.amount 
+            FROM issuance_tb i
+            LEFT JOIN lib_details_tb l ON i.document_id = l.document_id 
+            WHERE 1=1";
+            
     $params = [];
     $types = "";
 
     if (!empty($category)) {
-        $sql .= " AND category = ?";
+        $sql .= " AND i.category = ?";
         $params[] = $category;
         $types .= "s";
     }
 
     if (!empty($year)) {
-        $sql .= " AND YEAR(date_issued) = ?";
+        $sql .= " AND YEAR(i.date_issued) = ?";
         $params[] = $year;
         $types .= "s";
     }
 
     if (!empty($search)) {
-        $sql .= " AND (subject LIKE ? OR document_id LIKE ? OR issuance_number LIKE ?)";
+       
+        $sql .= " AND (i.subject LIKE ? OR i.document_id LIKE ? OR i.issuance_number LIKE ? OR l.project_number LIKE ? OR l.project_desc LIKE ?)";
         $searchTerm = "%" . $search . "%";
+        $params[] = $searchTerm; 
+        $params[] = $searchTerm; 
+        $params[] = $searchTerm; 
         $params[] = $searchTerm;
-        $params[] = $searchTerm;
-        $params[] = $searchTerm;
-        $types .= "sss";
+        $params[] = $searchTerm; 
+        $types .= "sssss";
     }
-if ($sort === 'newest') {
-        
-        $sql .= " ORDER BY created_at DESC, document_id DESC"; 
+
+    if ($sort === 'newest') {
+        $sql .= " ORDER BY i.created_at DESC, i.document_id DESC"; 
     } elseif ($sort === 'oldest') {
-        $sql .= " ORDER BY created_at ASC, document_id ASC";  
+        $sql .= " ORDER BY i.created_at ASC, i.document_id ASC";  
     } elseif ($sort === 'id_desc') {
-        $sql .= " ORDER BY document_id DESC";
+        $sql .= " ORDER BY i.document_id DESC";
     } elseif ($sort === 'id_asc') {
-        $sql .= " ORDER BY document_id ASC";
+        $sql .= " ORDER BY i.document_id ASC";
     } elseif ($sort === 'issuance_asc') {
-        $sql .= " ORDER BY issuance_number ASC"; 
+        $sql .= " ORDER BY i.issuance_number ASC"; 
     } else {
-        $sql .= " ORDER BY issuance_number ASC"; 
+        $sql .= " ORDER BY i.issuance_number ASC"; 
     }
     
     $stmt = $conn->prepare($sql);
@@ -74,7 +89,6 @@ function getAvailableYears($conn) {
 
 
 function generateDocumentID($conn, $year) {
-
     $prefix = "SEI-" . $year . "-";
     $stmt = $conn->prepare("SELECT document_id FROM issuance_tb WHERE document_id LIKE ? ORDER BY document_id DESC LIMIT 1");
     $searchPrefix = $prefix . '%';

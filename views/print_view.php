@@ -34,14 +34,12 @@
                     echo $current_category ? strtoupper(htmlspecialchars($current_category)) : "ALL ISSUANCES"; 
                 ?>
             </h3>
-           <!-- <p style="font-size: 11px;">Date Printed: <?php echo date('F d, Y'); ?></p> -->
         </div>
 
         <table>
             <thead>
                 <tr>
-                    <!-- <th style="width: 15%;">Document ID</th> --> 
-                    <th style="width: 15%;">Issuance No.</th>
+                    <th style="width: 15%;">Issuance / Project No.</th>
                     <th style="width: 15%;">Date Issued</th>
                     <th style="width: 45%;">Subject</th>
                     <th style="width: 10%;">Division</th>
@@ -51,21 +49,53 @@
                 <?php if (!empty($issuances)): ?>
                     <?php foreach ($issuances as $row): ?>
                     <tr>
-                        <!-- <td style="text-align: center;"><?php echo htmlspecialchars($row['document_id']); ?></td> -->
-                        <td style="text-align: center;"><?php echo htmlspecialchars($row['issuance_number']); ?></td>
-                        <td style="text-align: center;"><?php echo date('m-d-Y', strtotime($row['date_issued'])); ?></td>
-                        <td><?php echo nl2br(htmlspecialchars($row['subject'])); ?></td>
-                        <td style="text-align: center;"><?php echo htmlspecialchars($row['division'] ?? 'SEI'); ?></td>
+                        <td style="text-align: center; font-size: 12px; color: #000;">
+                            <?php 
+                                $is_lib = (stripos($row['category'] ?? '', 'lib') !== false || stripos($row['category'] ?? '', 'line-item') !== false);
+                                if ($is_lib && !empty($row['project_number'])) {
+                                    echo htmlspecialchars($row['project_number']);
+                                } else {
+                                    echo htmlspecialchars($row['issuance_number']);
+                                }
+                            ?>
+                        </td>
+                        <td style="text-align: center; font-size: 12px; color: #000;"><?php echo date('m-d-Y', strtotime($row['date_issued'])); ?></td>
+                        <td>
+                            <?php 
+                                if ($is_lib) {
+                                    
+                                    $desc = !empty($row['project_desc']) ? $row['project_desc'] : $row['subject'];
+                                    echo "<strong style='font-size: 12px; color: #000;'>" . nl2br(htmlspecialchars($desc)) . "</strong><br>";
+                                    
+                                   
+                                    echo "<div style='margin-top: 6px; font-size: 12px; color: #000; border-top: 1px dashed #ccc; padding-top: 4px;'>";
+                                    
+                                    $duration = htmlspecialchars(($row['start_month'] ?? '') . ' - ' . ($row['end_month'] ?? '') . ' ' . ($row['duration_year'] ?? ''));
+                                    echo "<strong>Duration:</strong> " . $duration . " &nbsp;|&nbsp; ";
+                                    
+                                    echo "<strong>Action:</strong> " . htmlspecialchars($row['action_type'] ?? '') . " &nbsp;|&nbsp; ";
+                                    
+                                    $amount = number_format((float)($row['amount'] ?? 0), 2);
+                                    echo "<strong>Budget: ₱" . $amount . "</strong>";
+                                    
+                                    echo "</div>";
+                                } else {
+                                    
+                                    echo "<span style='font-size: 12px; color: #000;'>" . nl2br(htmlspecialchars($row['subject'])) . "</span>"; 
+                                }
+                            ?>
+                        </td>
+                        <td style="text-align: center; font-size: 12px; color: #000;"><?php echo htmlspecialchars($row['division'] ?? 'SEI'); ?></td>
                     </tr>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <tr><td colspan="5" style="text-align: center;">No records found.</td></tr>
+                    <tr><td colspan="4" style="text-align: center; padding: 20px; font-size: 12px; color: #000;">No records found.</td></tr>
                 <?php endif; ?>
             </tbody>
         </table>
 
         <div style="margin-top: 30px; text-align: right;">
-            <p style="font-size: 10px; font-weight: bold;">DOST-SEI LOGBOOK SYSTEM</p>
+            <p style="font-size: 10px; font-weight: bold; color: #000;">DOST-SEI LOGBOOK SYSTEM</p>
         </div>
     </div> 
 </body>

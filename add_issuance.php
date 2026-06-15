@@ -14,10 +14,8 @@ if (!isset($_SESSION['user_id']) && !isset($_SESSION['username'])) {
 $current_year = date('Y');
 $next_doc_id = generateDocumentID($conn, $current_year);
 
-
 $clicked_category = trim($_GET['category'] ?? ''); 
 $suggested_number = '001'; 
-
 
 if (!empty($clicked_category)) {
     $stmt = $conn->prepare("SELECT issuance_number FROM issuance_tb WHERE category = ?");
@@ -29,7 +27,7 @@ if (!empty($clicked_category)) {
 $stmt->execute();
 $result = $stmt->get_result();
 
-$max_suffix = 0;
+$existing_numbers = [];
 
 if ($result && $result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
@@ -38,20 +36,29 @@ if ($result && $result->num_rows > 0) {
         
         $parts = explode('-', $val);
         
-        
         if (isset($parts[1]) && is_numeric($parts[1])) {
-            $num = (int)$parts[1];
-            
-         
-            if ($num > $max_suffix) {
-                $max_suffix = $num;
-            }
+            $existing_numbers[] = (int)$parts[1];
+        } elseif (is_numeric($val)) {
+            $existing_numbers[] = (int)$val;
         }
     }
-
-    $suggested_number = str_pad($max_suffix + 1, 3, '0', STR_PAD_LEFT);
 }
 
+if (!empty($existing_numbers)) {
+    sort($existing_numbers); 
+    
+    $next_num = 1;
+    foreach ($existing_numbers as $num) {
+        if ($num == $next_num) {
+            $next_num++; 
+        } elseif ($num > $next_num) {
+            break; 
+        }
+    }
+    $suggested_number = str_pad($next_num, 3, '0', STR_PAD_LEFT);
+} else {
+    $suggested_number = '001';
+}
 
 $categories = [];
 $cat_query = $conn->query("SELECT category_name FROM category_tb ORDER BY category_id ASC");
@@ -69,5 +76,12 @@ if ($div_query && $div_query->num_rows > 0) {
     }
 }
 
-include __DIR__ . '/views/add_form.php';
+
+$check_cat = strtolower(trim($clicked_category));
+
+if (strpos($check_cat, 'lib') !== false || strpos($check_cat, 'line-item') !== false) {
+    include __DIR__ . '/views/add_form_lib.php';
+} else {
+    include __DIR__ . '/views/add_form.php';
+}
 ?>
