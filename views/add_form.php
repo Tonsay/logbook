@@ -101,7 +101,7 @@
                             <input type="text" id="year_prefix" name="year_prefix" style="width: 90px; text-align: center; font-weight: bold; background: rgba(0, 0, 0, 0.2);" value="<?php echo date('Y'); ?>" readonly>
                             <span style="color: white; font-weight: bold; font-size: 1.2rem;">-</span>
                             
-                            <input type="text" id="issuance_num_only" name="issuance_num_only" value="<?php echo htmlspecialchars($suggested_number); ?>" required maxlength="5" pattern="[0-9]{3}(-[a-zA-Z])?" title="Enter 3 numbers, optionally followed by a dash and a letter (e.g., 001 or 001-A)">
+                            <input type="text" id="issuance_num_only" name="issuance_num_only" value="<?php echo htmlspecialchars($suggested_number); ?>" required maxlength="6" pattern="[0-9]{3}(-[a-zA-Z])?" title="Enter 3 numbers, optionally followed by a dash and a letter (e.g., 001 or 001-A)">
                         </div>
                     </div>
 

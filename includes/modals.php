@@ -387,7 +387,6 @@ function handleEditSubmit(event) {
     .then(data => {
         if (data.includes("SUCCESS")) {
             
-            
             if (typeof triggerSuccessLoad === 'function') {
                 triggerSuccessLoad("Document updated successfully!");
             } else {

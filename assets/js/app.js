@@ -13,7 +13,7 @@ function showDetails(data) {
     document.getElementById('modalCategory').innerText = data.category || "N/A";
     document.getElementById('modalDocID').innerText    = data.document_id || "N/A";
     
-   
+    // Smart Swap: If it's a LIB, show the project number instead of issuance number
     let isLib = data.category && (data.category.includes('LIB') || data.category.includes('Line-Item'));
     if (isLib) {
         document.getElementById('modalIssNo').innerText = data.project_number || "N/A";
@@ -24,13 +24,13 @@ function showDetails(data) {
     document.getElementById('modalDivision').innerText = data.division || "N/A";
     document.getElementById('modalDate').innerText     = data.date_issued || "N/A";
     
-    
+    // For LIBs, the description is saved in project_desc. For normal, it's subject.
     document.getElementById('modalSubject').innerText  = (isLib && data.project_desc) ? data.project_desc : (data.subject || "N/A");
     
     document.getElementById('modalCreatedBy').innerText = data.added_by || "Admin"; 
     document.getElementById('modalCreatedAt').innerText = data.created_at || "N/A";
 
-  
+    // --- NEW: REVEAL HIDDEN LIB SECTION IN VIEW MODAL ---
     const libSection = document.getElementById('lib_financial_section');
     if (libSection) {
         if (isLib) {
@@ -96,11 +96,12 @@ function openEditModal() {
     let isLib = data.category && (data.category.includes('LIB') || data.category.includes('Line-Item'));
 
     if (isLib) {
-       
+        // --- POPULATE THE LIB MODAL ---
         if(document.getElementById('edit_lib_display_id')) document.getElementById('edit_lib_display_id').innerText = data.document_id;
         if(document.getElementById('edit_lib_doc_id')) document.getElementById('edit_lib_doc_id').value = data.document_id || '';
         if(document.getElementById('edit_lib_project_number')) document.getElementById('edit_lib_project_number').value = data.project_number || data.issuance_number || '';
-       
+        
+        // Format the date properly for the <input type="date">
         if (data.date_issued && document.getElementById('edit_lib_date')) {
             let d = new Date(data.date_issued);
             document.getElementById('edit_lib_date').value = d.toISOString().split('T')[0];
@@ -112,22 +113,23 @@ function openEditModal() {
         if(document.getElementById('edit_lib_year')) document.getElementById('edit_lib_year').value = data.duration_year || new Date().getFullYear();
         if(document.getElementById('edit_lib_amount')) document.getElementById('edit_lib_amount').value = data.amount || 0;
 
-      
+        // NEW: Smart split for Edit Modal to pre-check the right radio button
         let actionVal = data.action_type || 'Original Budget';
         let orderVal = '';
 
+        // Check if the database text starts with 1st, 2nd, etc.
         const match = actionVal.match(/^(1st|2nd|3rd|4th|5th)\s+(Amendment\/Realignment)$/);
         if (match) {
-            orderVal = match[1]; 
-            actionVal = match[2];
+            orderVal = match[1]; // Gets the '1st'
+            actionVal = match[2]; // Gets the 'Amendment/Realignment'
         }
 
         if(document.getElementById('edit_lib_action')) {
             document.getElementById('edit_lib_action').value = actionVal;
-            toggleEditActionNumber(); 
+            toggleEditActionNumber(); // Force the hidden box to appear if needed
         }
 
-     
+        // Pre-check the correct radio button
         if (orderVal) {
             let targetRadio = document.querySelector(`#edit_action_number_container input[value="${orderVal}"]`);
             if (targetRadio) targetRadio.checked = true;
@@ -418,21 +420,17 @@ function closeHistoryModal() {
 
 /* ADD ENTRY LOGIC */
 function openAddEntryModal(categoryName) {
+    // ROUTE TO CONTROLLER: Send directly to add_issuance controller to load data variables
     window.location.href = '/logbook/add_issuance.php?category=' + encodeURIComponent(categoryName);
 }
 
-
 document.addEventListener("DOMContentLoaded", () => {
-   
     const urlParams = new URLSearchParams(window.location.search);
     const urlCategory = urlParams.get('category');
 
     if (urlCategory) {
-       
         const categoryDropdown = document.querySelector('select[name="category"], select[name="category_name"]');
-        
         if (categoryDropdown) {
-           
             for (let i = 0; i < categoryDropdown.options.length; i++) {
                 if (categoryDropdown.options[i].value === urlCategory || categoryDropdown.options[i].text === urlCategory) {
                     categoryDropdown.selectedIndex = i;
@@ -442,7 +440,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 });
-
 
 document.addEventListener("DOMContentLoaded", () => {
     flatpickr(".custom-date-picker", {
@@ -456,32 +453,19 @@ document.addEventListener("DOMContentLoaded", () => {
    MAGIC ENYE SHORTCUT (Alt + N)
    ========================================= */
 document.addEventListener('keydown', function(event) {
-    
     if (event.altKey && (event.key === 'n' || event.key === 'N' || event.code === 'KeyN')) {
-        
-      
         const activeBox = document.activeElement;
-        
-      
         if (activeBox.tagName === 'INPUT' || activeBox.tagName === 'TEXTAREA') {
-            
             event.preventDefault(); 
-       
             const enye = event.shiftKey ? 'Ñ' : 'ñ';
-            
-        
             const start = activeBox.selectionStart;
             const end = activeBox.selectionEnd;
             const currentText = activeBox.value;
-            
-         
             activeBox.value = currentText.slice(0, start) + enye + currentText.slice(end);
-
             activeBox.selectionStart = activeBox.selectionEnd = start + 1;
         }
     }
 });
-
 
 /* =========================================
    LIB FORM LOGIC (Auto-Fill & Formatting)
@@ -516,13 +500,26 @@ document.addEventListener("DOMContentLoaded", () => {
     
     if (newProjectInput) {
         newProjectInput.addEventListener('input', function (e) {
-            let val = this.value.replace(/\D/g, ''); 
-            val = val.substring(0, 6); 
+            let val = this.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase(); 
+            
+            val = val.substring(0, 8); 
+            
+            let numbers = val.replace(/[A-Z]/g, '').substring(0, 6); 
+            let letters = val.replace(/[0-9]/g, '').substring(0, 2);  
             
             let formatted = '';
-            if (val.length > 0) formatted += val.substring(0, 2); 
-            if (val.length >= 3) formatted += '-' + val.substring(2, 4); 
-            if (val.length >= 5) formatted += '-' + val.substring(4, 6); 
+            
+            if (numbers.length > 0) formatted += numbers.substring(0, 2);
+            if (numbers.length > 2) formatted += '-' + numbers.substring(2, 4);
+            if (numbers.length > 4) formatted += '-' + numbers.substring(4, 6);
+            
+            if (letters) {
+                if (formatted.length > 0) {
+                    formatted += '-' + letters;
+                } else {
+                    formatted += letters;
+                }
+            }
             
             this.value = formatted;
         });
@@ -537,13 +534,11 @@ function handleEditSubmit(event) {
    
     if(typeof showLoader === 'function') showLoader();
     
-  
     const standardForm = document.getElementById('editIssuanceForm');
     const libForm = document.getElementById('editLibForm'); 
  
     const form = event.target;
     const formData = new FormData(form);
-    
     
     const fetchUrl = formData.get('category') && formData.get('category').includes('LIB') 
         ? '/logbook/process_edit_lib.php' 
@@ -585,7 +580,6 @@ function toggleActionNumber() {
     
     if (!actionSelect || !numberContainer) return;
 
-
     if (actionSelect.value === 'Amendment/Realignment') {
         numberContainer.style.display = 'block';
     } else {
@@ -609,8 +603,70 @@ function toggleEditActionNumber() {
     } else {
         numberContainer.style.display = 'none';
         
-      
         const radios = numberContainer.querySelectorAll('input[name="action_number"]');
         radios.forEach(radio => radio.checked = false);
     }
 }
+
+/* =========================================
+   STANDARD ISSUANCE NUMBER FORMATTER
+   ========================================= */
+document.addEventListener("DOMContentLoaded", () => {
+   
+    const issuanceInputs = [
+        document.getElementById('edit_issuance_number'),
+        document.getElementById('issuance_num_only') 
+    ];
+
+    issuanceInputs.forEach(input => {
+        if (input) {
+            
+            input.removeAttribute('maxlength');
+            
+            input.addEventListener('input', function (e) {
+                
+                let val = this.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase(); 
+                let formatted = '';
+                
+                if (val.startsWith("20") && val.length >= 4) {
+                    let year = val.substring(0, 4);
+                    let remaining = val.substring(4);
+                    
+                    let numbers = remaining.replace(/[A-Z]/g, '').substring(0, 3);
+                    let letters = remaining.replace(/[0-9]/g, '').substring(0, 2);
+                    
+                    formatted += year;
+                    if (numbers.length > 0) formatted += '-' + numbers;
+                    if (letters.length > 0) formatted += '-' + letters;
+                } 
+                else {
+                    let numbers = val.replace(/[A-Z]/g, '').substring(0, 3);
+                    let letters = val.replace(/[0-9]/g, '').substring(0, 2);
+                    
+                    if (numbers.length > 0) formatted += numbers;
+                    if (letters.length > 0) formatted += '-' + letters;
+                }
+                
+                this.value = formatted;
+            });
+        }
+    });
+});
+
+/* =========================================
+   SMART CATEGORY DROPDOWN REDIRECT
+   ========================================= */
+document.addEventListener("DOMContentLoaded", () => {
+    const categoryDropdown = document.querySelector('select[name="category"]');
+
+    if (categoryDropdown) {
+        categoryDropdown.addEventListener('change', function() {
+            const selectedValue = this.value;
+
+            // ROUTE TO CONTROLLER: Send directly to add_issuance controller to preserve backend environment values!
+            if (selectedValue.includes('LIB') || selectedValue.includes('Line-Item')) {
+                window.location.href = '/logbook/add_issuance.php?category=' + encodeURIComponent(selectedValue);
+            }
+        });
+    }
+});

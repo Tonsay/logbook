@@ -6,6 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 require_once __DIR__ . '/includes/db.php';        
 require_once __DIR__ . '/includes/functions.php'; 
 
+
 if (!isset($_SESSION['user_id']) && !isset($_SESSION['username'])) {
     header("Location: /logbook/login.php");
     exit();
@@ -32,8 +33,6 @@ $existing_numbers = [];
 if ($result && $result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $val = trim($row['issuance_number']);
-        
-        
         $parts = explode('-', $val);
         
         if (isset($parts[1]) && is_numeric($parts[1])) {
@@ -43,7 +42,7 @@ if ($result && $result->num_rows > 0) {
         }
     }
 }
-
+$stmt->close(); 
 if (!empty($existing_numbers)) {
     sort($existing_numbers); 
     
@@ -60,6 +59,7 @@ if (!empty($existing_numbers)) {
     $suggested_number = '001';
 }
 
+
 $categories = [];
 $cat_query = $conn->query("SELECT category_name FROM category_tb ORDER BY category_id ASC");
 if ($cat_query && $cat_query->num_rows > 0) {
@@ -67,6 +67,7 @@ if ($cat_query && $cat_query->num_rows > 0) {
         $categories[] = $row['category_name'];
     }
 }
+
 
 $divisions = [];
 $div_query = $conn->query("SELECT division_name FROM divisions_tb ORDER BY division_name ASC");
