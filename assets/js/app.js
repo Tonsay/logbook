@@ -507,16 +507,23 @@ document.addEventListener("DOMContentLoaded", () => {
         newProjectInput.addEventListener('input', function (e) {
             let val = this.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase(); 
             
-            val = val.substring(0, 8); 
+          
+            val = val.substring(0, 9); 
             
-            let numbers = val.replace(/[A-Z]/g, '').substring(0, 6); 
+            
+            let numbers = val.replace(/[A-Z]/g, '').substring(0, 7); 
             let letters = val.replace(/[0-9]/g, '').substring(0, 2);  
             
             let formatted = '';
             
             if (numbers.length > 0) formatted += numbers.substring(0, 2);
-            if (numbers.length > 2) formatted += '-' + numbers.substring(2, 4);
-            if (numbers.length > 4) formatted += '-' + numbers.substring(4, 6);
+            
+            
+            if (numbers.length > 2) formatted += '-' + numbers.substring(2, 5);
+            
+            
+            if (numbers.length > 5) formatted += '-' + numbers.substring(5, 7);
+            
             
             if (letters) {
                 if (formatted.length > 0) {

@@ -4,37 +4,36 @@ require_once __DIR__ . '/includes/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
-    
     $document_id = trim($_POST['document_id'] ?? '');
     $division = trim($_POST['division'] ?? '');
     $category = trim($_POST['category'] ?? 'Line-Item-Budget (LIB)');
     $date_issued = trim($_POST['date_issued'] ?? '');
     $username = $_SESSION['username'] ?? 'Admin'; 
     
-    
     $year_prefix = trim($_POST['project_year_prefix'] ?? date('Y'));
     $project_selection = trim($_POST['project_number_select'] ?? '');
+    $new_project_number = trim($_POST['new_project_number'] ?? '');
     
-    if ($project_selection === 'NEW') {
-       
-        $project_number = $year_prefix . '-' . trim($_POST['new_project_number'] ?? '');
+    // SMART CAPTURE: Because we updated app.js to let you edit existing codes,
+    // we must prioritize whatever is typed inside the text box!
+    if (!empty($new_project_number)) {
+        $project_number = $year_prefix . '-' . $new_project_number;
     } else {
-       
-        $project_number = $year_prefix . '-' . $project_selection;
+        $project_number = $year_prefix . '-' . $project_selection; // Fallback
     }
     
-   
     $project_desc = trim($_POST['lib_project_desc'] ?? '');
     $start_month = trim($_POST['duration_start_month'] ?? '');
     $end_month = trim($_POST['duration_end_month'] ?? '');
     $duration_year = (int)($_POST['duration_year'] ?? date('Y'));
     
-   
-    $action_type = trim($_POST['lib_action_type'] ?? '');
+    // FIXED: Uses 'Original Budget' as default and perfectly matches the new dropdown values
+    $action_type = trim($_POST['lib_action_type'] ?? 'Original Budget');
     $action_number = trim($_POST['action_number'] ?? '');
     
-    if (!empty($action_number) && ($action_type === 'Realignment' || $action_type === 'Amendment')) {
-        $action_type = $action_number . ' ' . $action_type; 
+    // Adds the dash exactly as requested (e.g., "1st - Amendment/Realignment")
+    if (!empty($action_number) && $action_type === 'Amendment/Realignment') {
+        $action_type = $action_number . ' - ' . $action_type; 
     }
     
     $amount = (float)($_POST['lib_amount'] ?? 0);
@@ -48,7 +47,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $conn->begin_transaction();
 
-        
         $stmt_main = $conn->prepare("INSERT INTO issuance_tb (document_id, issuance_number, date_issued, subject, division, category, added_by) VALUES (?, ?, ?, ?, ?, ?, ?)");
         $stmt_main->bind_param("sssssss", $document_id, $project_number, $date_issued, $project_desc, $division, $category, $username);
         
@@ -56,7 +54,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new Exception("Error saving main document: " . $stmt_main->error);
         }
 
-       
         $stmt_lib = $conn->prepare("INSERT INTO lib_details_tb (document_id, project_number, project_desc, start_month, end_month, duration_year, action_type, amount) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt_lib->bind_param("sssssiss", $document_id, $project_number, $project_desc, $start_month, $end_month, $duration_year, $action_type, $amount);
         
@@ -64,7 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new Exception("Error saving financial details: " . $stmt_lib->error);
         }
 
-       
         $stmt_hist = $conn->prepare("INSERT INTO history_tb (document_id, action_type, performed_by, action_details) VALUES (?, ?, ?, ?)");
         $hist_action = "Added Entry";
         $hist_details = "Created Line-Item-Budget for Project: " . $project_number;

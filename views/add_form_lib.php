@@ -173,7 +173,7 @@
                         <label>Budget Action</label>
                         <select name="lib_action_type" id="lib_action_type" required style="font-weight: bold; color: #00A5EF;" onchange="toggleActionNumber()">
                             <option value="" disabled selected>-- Select Action --</option>
-                            <option value="New Annual Budget">Original Budget</option>
+                            <option value="Original Budget">Original Budget</option>
                             <option value="Amendment/Realignment">Amendment/Realignment</option>
                         </select>
 
@@ -214,26 +214,6 @@
 <?php include __DIR__ . '/../includes/modals.php'; ?>
 <script src="/logbook/assets/js/app.js?v=<?php echo time(); ?>"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
-<script>
-function toggleActionNumber() {
-    const actionSelect = document.getElementById('lib_action_type');
-    const numberContainer = document.getElementById('action_number_container');
-    
-    if (!actionSelect || !numberContainer) return;
-
-   
-    if (actionSelect.value === 'Amendment/Realignment') {
-        numberContainer.style.display = 'block';
-    } else {
-        numberContainer.style.display = 'none';
-        
-        document.querySelectorAll('input[name="action_number"]').forEach(radio => {
-            radio.checked = false;
-        });
-    }
-}
-</script>
 
 </body>
 </html>
