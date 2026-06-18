@@ -57,8 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
     $check_stmt->close();
-    // ==========================================
-
+   
     try {
         $conn->begin_transaction();
 
