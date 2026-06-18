@@ -14,12 +14,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $project_selection = trim($_POST['project_number_select'] ?? '');
     $new_project_number = trim($_POST['new_project_number'] ?? '');
     
-    // SMART CAPTURE: Because we updated app.js to let you edit existing codes,
-    // we must prioritize whatever is typed inside the text box!
     if (!empty($new_project_number)) {
         $project_number = $year_prefix . '-' . $new_project_number;
     } else {
-        $project_number = $year_prefix . '-' . $project_selection; // Fallback
+        $project_number = $year_prefix . '-' . $project_selection;
     }
     
     $project_desc = trim($_POST['lib_project_desc'] ?? '');
@@ -27,22 +25,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $end_month = trim($_POST['duration_end_month'] ?? '');
     $duration_year = (int)($_POST['duration_year'] ?? date('Y'));
     
-    // FIXED: Uses 'Original Budget' as default and perfectly matches the new dropdown values
     $action_type = trim($_POST['lib_action_type'] ?? 'Original Budget');
     $action_number = trim($_POST['action_number'] ?? '');
     
-    // Adds the dash exactly as requested (e.g., "1st - Amendment/Realignment")
     if (!empty($action_number) && $action_type === 'Amendment/Realignment') {
         $action_type = $action_number . ' - ' . $action_type; 
     }
     
-    $amount = (float)($_POST['lib_amount'] ?? 0);
+    
+    $raw_amount = trim($_POST['lib_amount'] ?? '0');
+    $clean_amount = str_replace(',', '', $raw_amount); 
+    $amount = (float)$clean_amount; 
 
     if (empty($document_id) || empty($project_number) || empty($date_issued)) {
         $_SESSION['error_message'] = "Please fill in all required fields.";
         header("Location: /logbook/add_issuance.php?category=" . urlencode($category));
         exit();
     }
+
+   
+    $check_stmt = $conn->prepare("SELECT document_id FROM lib_details_tb WHERE project_number = ? AND action_type = ?");
+    $check_stmt->bind_param("ss", $project_number, $action_type);
+    $check_stmt->execute();
+    $check_stmt->store_result();
+
+    if ($check_stmt->num_rows > 0) {
+       
+        $check_stmt->close();
+        $_SESSION['error_message'] = "Duplicate Entry! Project Code '$project_number' already has a record for '$action_type'.";
+        header("Location: /logbook/add_issuance.php?category=" . urlencode($category));
+        exit();
+    }
+    $check_stmt->close();
+    // ==========================================
 
     try {
         $conn->begin_transaction();
@@ -55,7 +70,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $stmt_lib = $conn->prepare("INSERT INTO lib_details_tb (document_id, project_number, project_desc, start_month, end_month, duration_year, action_type, amount) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt_lib->bind_param("sssssiss", $document_id, $project_number, $project_desc, $start_month, $end_month, $duration_year, $action_type, $amount);
+      
+        $stmt_lib->bind_param("sssssisd", $document_id, $project_number, $project_desc, $start_month, $end_month, $duration_year, $action_type, $amount);
         
         if (!$stmt_lib->execute()) {
             throw new Exception("Error saving financial details: " . $stmt_lib->error);

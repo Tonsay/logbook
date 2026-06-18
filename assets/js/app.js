@@ -13,7 +13,6 @@ function showDetails(data) {
     document.getElementById('modalCategory').innerText = data.category || "N/A";
     document.getElementById('modalDocID').innerText    = data.document_id || "N/A";
     
-   
     let isLib = data.category && (data.category.includes('LIB') || data.category.includes('Line-Item'));
     if (isLib) {
         document.getElementById('modalIssNo').innerText = data.project_number || "N/A";
@@ -24,13 +23,11 @@ function showDetails(data) {
     document.getElementById('modalDivision').innerText = data.division || "N/A";
     document.getElementById('modalDate').innerText     = data.date_issued || "N/A";
     
-
     document.getElementById('modalSubject').innerText  = (isLib && data.project_desc) ? data.project_desc : (data.subject || "N/A");
     
     document.getElementById('modalCreatedBy').innerText = data.added_by || "Admin"; 
     document.getElementById('modalCreatedAt').innerText = data.created_at || "N/A";
 
-   
     const libSection = document.getElementById('lib_financial_section');
     if (libSection) {
         if (isLib) {
@@ -96,12 +93,10 @@ function openEditModal() {
     let isLib = data.category && (data.category.includes('LIB') || data.category.includes('Line-Item'));
 
     if (isLib) {
-     
         if(document.getElementById('edit_lib_display_id')) document.getElementById('edit_lib_display_id').innerText = data.document_id;
         if(document.getElementById('edit_lib_doc_id')) document.getElementById('edit_lib_doc_id').value = data.document_id || '';
         if(document.getElementById('edit_lib_project_number')) document.getElementById('edit_lib_project_number').value = data.project_number || data.issuance_number || '';
         
-       
         if (data.date_issued && document.getElementById('edit_lib_date')) {
             let d = new Date(data.date_issued);
             document.getElementById('edit_lib_date').value = d.toISOString().split('T')[0];
@@ -113,11 +108,9 @@ function openEditModal() {
         if(document.getElementById('edit_lib_year')) document.getElementById('edit_lib_year').value = data.duration_year || new Date().getFullYear();
         if(document.getElementById('edit_lib_amount')) document.getElementById('edit_lib_amount').value = data.amount || 0;
 
-        
         let actionVal = data.action_type || 'Original Budget';
         let orderVal = '';
 
-        
         const match = actionVal.match(/^(1st|2nd|3rd|4th|5th)\s+(Amendment\/Realignment)$/);
         if (match) {
             orderVal = match[1]; 
@@ -129,7 +122,6 @@ function openEditModal() {
             toggleEditActionNumber(); 
         }
 
-        
         if (orderVal) {
             let targetRadio = document.querySelector(`#edit_action_number_container input[value="${orderVal}"]`);
             if (targetRadio) targetRadio.checked = true;
@@ -140,7 +132,6 @@ function openEditModal() {
         if(editLibModal) editLibModal.style.display = 'flex';
 
     } else {
-        
         if(document.getElementById('edit_display_id')) document.getElementById('edit_display_id').innerText = data.document_id;
         if(document.getElementById('edit_doc_id_hidden')) document.getElementById('edit_doc_id_hidden').value  = data.document_id;
         if(document.getElementById('edit_division')) document.getElementById('edit_division').value       = data.division;
@@ -365,6 +356,9 @@ function showLoader() {
 
         loader.style.display = 'flex';
         setTimeout(() => { loader.style.opacity = '1'; }, 10);
+        
+        // Escape Hatch: Force close loader if stuck for 8 seconds
+        setTimeout(() => { hideLoader(); }, 8000);
     }
 }
 
@@ -420,7 +414,6 @@ function closeHistoryModal() {
 
 /* ADD ENTRY LOGIC */
 function openAddEntryModal(categoryName) {
-    
     window.location.href = '/logbook/add_issuance.php?category=' + encodeURIComponent(categoryName);
 }
 
@@ -478,7 +471,6 @@ function autoFillProject() {
     if (!selector || !newProjInput || !descBox) return; 
     var selectedOption = selector.options[selector.selectedIndex];
     
-   
     newProjInput.style.display = "block";
     newProjInput.required = true;
     
@@ -490,10 +482,7 @@ function autoFillProject() {
         descBox.style.background = "#ffffff";
         descBox.placeholder = "Type the new project description here...";
     } else {
-        
         newProjInput.value = selector.value;
-        
-      
         descBox.value = selectedOption.getAttribute("data-desc");
         descBox.readOnly = true;
         descBox.style.background = "rgba(0,0,0,0.05)"; 
@@ -507,9 +496,7 @@ document.addEventListener("DOMContentLoaded", () => {
         newProjectInput.addEventListener('input', function (e) {
             let val = this.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase(); 
             
-          
             val = val.substring(0, 9); 
-            
             
             let numbers = val.replace(/[A-Z]/g, '').substring(0, 7); 
             let letters = val.replace(/[0-9]/g, '').substring(0, 2);  
@@ -517,13 +504,8 @@ document.addEventListener("DOMContentLoaded", () => {
             let formatted = '';
             
             if (numbers.length > 0) formatted += numbers.substring(0, 2);
-            
-            
             if (numbers.length > 2) formatted += '-' + numbers.substring(2, 5);
-            
-            
             if (numbers.length > 5) formatted += '-' + numbers.substring(5, 7);
-            
             
             if (letters) {
                 if (formatted.length > 0) {
@@ -624,7 +606,6 @@ function toggleEditActionNumber() {
    STANDARD ISSUANCE NUMBER FORMATTER
    ========================================= */
 document.addEventListener("DOMContentLoaded", () => {
-   
     const issuanceInputs = [
         document.getElementById('edit_issuance_number'),
         document.getElementById('issuance_num_only') 
@@ -632,11 +613,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     issuanceInputs.forEach(input => {
         if (input) {
-            
             input.removeAttribute('maxlength');
             
             input.addEventListener('input', function (e) {
-                
                 let val = this.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase(); 
                 let formatted = '';
                 
@@ -680,4 +659,35 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
+});
+
+/* =========================================
+   CURRENCY FORMATTER (Auto-Commas)
+   ========================================= */
+document.addEventListener("DOMContentLoaded", () => {
+    
+    const amountInputs = document.querySelectorAll('input[name="lib_amount"]');
+
+    amountInputs.forEach(input => {
+        input.addEventListener('input', function(e) {
+            
+            let value = this.value.replace(/[^0-9.]/g, '');
+
+           
+            const parts = value.split('.');
+            if (parts.length > 2) {
+                value = parts[0] + '.' + parts.slice(1).join('');
+            }
+
+            
+            if (value !== '') {
+                let formattedParts = value.split('.');
+               
+                formattedParts[0] = formattedParts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                this.value = formattedParts.join('.');
+            } else {
+                this.value = '';
+            }
+        });
+    });
 });

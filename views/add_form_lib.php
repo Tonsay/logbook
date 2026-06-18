@@ -10,6 +10,25 @@
 </head>
 <body>
 
+    <?php if (isset($_SESSION['error_message'])): ?>
+        <div id="errorToastUI" style="position: fixed; top: 20px; right: 20px; background: #fff0f0; border-left: 6px solid #ff4d4d; color: #d32f2f; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); z-index: 9999; font-weight: 600; display: flex; align-items: center; gap: 12px; font-family: 'Plus Jakarta Sans', sans-serif;">
+            <span style="font-size: 20px;">⚠️</span>
+            <span><?php echo htmlspecialchars($_SESSION['error_message']); ?></span>
+        </div>
+        <script>
+            setTimeout(() => {
+                const toast = document.getElementById('errorToastUI');
+                if(toast) {
+                    toast.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateX(20px)';
+                    setTimeout(() => toast.remove(), 500);
+                }
+            }, 5000);
+        </script>
+        <?php unset($_SESSION['error_message']); ?>
+    <?php endif; ?>
+
     <?php 
     
     $existing_projects = [];
@@ -72,7 +91,7 @@
         <div class="form-container">
             <h2>Line Item Budget (LIB) Details</h2>
     
-            <form action="/logbook/process_add_lib.php" method="POST" onsubmit="showLoader()">
+            <form action="/logbook/process_add_lib.php" method="POST" onsubmit="if(!this.checkValidity()){ return false; } showLoader();">
                 <input type="hidden" name="category" value="Line-Item-Budget (LIB)">
 
                 <div class="form-row">
@@ -201,7 +220,7 @@
                     
                     <div class="form-group">
                         <label>Budget Amount (Php)</label>
-                        <input type="number" step="0.01" name="lib_amount" placeholder="0.00" required>
+                        <input type="text" name="lib_amount" placeholder="0.00" required>
                     </div>
                 </div>
                 
