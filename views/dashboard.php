@@ -11,7 +11,7 @@ $current_category = $_GET['category'] ?? '';
 $current_year = $_GET['year'] ?? '';
 $search_query = $_GET['search'] ?? '';
 
-$current_sort = $_GET['sort'] ?? 'issuance_asc';
+$current_sort = $_GET['sort'] ?? 'newest';
 
 $issuances = getIssuances($conn, $current_category, $search_query, $current_year, $current_sort);
 $available_years = getAvailableYears($conn);
@@ -99,14 +99,14 @@ $available_years = getAvailableYears($conn);
                     
                     <span style="font-size: 13px; font-weight: 700; color: #888888; text-transform: uppercase; letter-spacing: 0.5px;">Sort:</span>
                     <select name="sort" class="year-dropdown" onchange="this.form.submit()" style="cursor: pointer; padding: 8px;">
-                        <option value="issuance_asc" <?php if($current_sort == 'issuance_asc' || empty($current_sort)) echo 'selected'; ?>>
+                        <option value="newest" <?php if($current_sort == 'newest' || empty($current_sort)) echo 'selected'; ?>>
+                            Newest First
+                        </option>
+                        <option value="issuance_asc" <?php if($current_sort == 'issuance_asc') echo 'selected'; ?>>
                             Issuance No.
                         </option>
-                          <option value="id_asc" <?php if($current_sort == 'id_asc') echo 'selected'; ?>>
+                        <option value="id_asc" <?php if($current_sort == 'id_asc') echo 'selected'; ?>>
                             Document ID
-                        </option>
-                        <option value="newest" <?php if($current_sort == 'newest') echo 'selected'; ?>>
-                            Newest First
                         </option>
                     </select>
                 </form>

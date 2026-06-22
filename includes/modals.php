@@ -341,7 +341,7 @@
                     </div>
                     <div>
                         <label style="color: #555555; font-size: 10px; font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 5px;">Budget Amount (Php)</label>
-                        <input type="number" step="0.01" name="lib_amount" id="edit_lib_amount" required style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box;">
+                        <input type="text" name="lib_amount" id="edit_lib_amount" required style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box;">
                     </div>
                 </div>
             </div>
