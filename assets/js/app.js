@@ -357,7 +357,7 @@ function showLoader() {
         loader.style.display = 'flex';
         setTimeout(() => { loader.style.opacity = '1'; }, 10);
         
-        // Escape Hatch: Force close loader if stuck for 8 seconds
+        
         setTimeout(() => { hideLoader(); }, 8000);
     }
 }
