@@ -21,3 +21,4 @@ $available_years = getAvailableYears($conn);
 
 include 'views/dashboard.php';
 ?>
+<!--© 2026 Florence Pearl B. Tonsay. All rights reserved.-->
